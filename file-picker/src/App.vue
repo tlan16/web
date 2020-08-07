@@ -1,28 +1,42 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+  <div id="oc-file-picker">
+    <button v-if="!isAuthenticated" @click="authenticate">Log in</button>
+    <div v-else>Hello world</div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import initVueAuthenticate from './services/auth'
 
 export default {
   name: 'App',
-  components: {
-    HelloWorld
+
+  data: () => ({
+    authInstance: null,
+    isAuthenticated: false,
+    bearerToken: ''
+  }),
+
+  created() {
+    this.init()
+  },
+
+  methods: {
+    async init() {
+      let config = await fetch(window.location.origin + '/file-picker-config.json')
+
+      config = await config.json()
+      this.authInstance = initVueAuthenticate(config)
+      this.isAuthenticated = this.authInstance.isAuthenticated()
+
+      if (this.isAuthenticated) {
+        this.bearerToken = this.authInstance.getToken()
+      }
+    },
+
+    authenticate() {
+      this.authInstance.authenticate()
+    }
   }
 }
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>

@@ -34,3 +34,5 @@ tests/reports
 tests/acceptance/filesForUpload
 tests/ocis
 tests/testing-app
+
+file-picker/public/file-picker-config.json
