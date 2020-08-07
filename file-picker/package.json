@@ -11,6 +11,8 @@
   "dependencies": {
     "core-js": "^3.6.5",
     "oidc-client": "^1.10.1",
+    "owncloud-design-system": "^1.9.0",
+    "owncloud-sdk": "^1.0.0-728",
     "vue": "^2.6.11"
   },
   "devDependencies": {

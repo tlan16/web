@@ -1,6 +1,6 @@
 <template>
   <div id="oc-file-picker">
-    <button v-if="!isAuthenticated" @click="authenticate">Log in</button>
+    <oc-button variation="primary" v-if="!isAuthenticated" @click="authenticate">Log in</oc-button>
     <div v-else>Hello world</div>
   </div>
 </template>
