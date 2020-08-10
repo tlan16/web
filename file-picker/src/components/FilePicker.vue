@@ -1,7 +1,12 @@
 <template>
   <div>
     <div v-if="state === 'loading'" key="loading-message" v-text="'Loading'" />
-    <list-resources v-if="state === 'loaded'" key="resources-list" :resources="resources" />
+    <list-resources
+      v-if="state === 'loaded'"
+      key="resources-list"
+      :resources="resources"
+      :current-folder="currentFolder"
+    />
   </div>
 </template>
 
@@ -18,14 +23,16 @@ export default {
 
   data: () => ({
     state: 'loading',
-    resources: []
+    resources: [],
+    currentFolder: null
   }),
 
   created() {
     this.$client.files
       .list('/', 1, this.davProperties)
       .then(resources => {
-        this.resources = resources
+        this.resources = resources.splice(1)
+        this.currentFolder = resources[0]
         this.state = 'loaded'
       })
       .catch(error => {

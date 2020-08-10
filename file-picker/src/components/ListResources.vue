@@ -58,6 +58,10 @@ export default {
       type: Boolean,
       required: false,
       default: false
+    },
+    currentFolder: {
+      type: Object,
+      required: true
     }
   },
 
