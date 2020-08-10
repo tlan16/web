@@ -1,15 +1,22 @@
 <template>
   <div id="oc-file-picker">
-    <oc-button variation="primary" v-if="!isAuthenticated" @click="authenticate">Log in</oc-button>
-    <div v-else>Hello world</div>
+    <oc-button v-if="!isAuthenticated" key="login-form" variation="primary" @click="authenticate"
+      >Log in</oc-button
+    >
+    <file-picker key="file-picker" v-else />
   </div>
 </template>
 
 <script>
 import initVueAuthenticate from './services/auth'
+import FilePicker from './components/FilePicker.vue'
 
 export default {
   name: 'App',
+
+  components: {
+    FilePicker
+  },
 
   data: () => ({
     authInstance: null,
@@ -31,6 +38,17 @@ export default {
 
       if (this.isAuthenticated) {
         this.bearerToken = this.authInstance.getToken()
+
+        // Init owncloud-sdk
+        this.$client.init({
+          baseUrl: config.server,
+          auth: {
+            bearer: this.bearerToken
+          },
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+          }
+        })
       }
     },
 
