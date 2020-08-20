@@ -30,16 +30,6 @@
           />
         </div>
         <resource :item="rowItem" />
-        <div
-          class="uk-text-meta uk-text-nowrap uk-width-small uk-text-right"
-          :class="{ 'uk-visible@s': !_sidebarOpen, 'uk-hidden': _sidebarOpen }"
-          v-text="getResourceSize(rowItem.size)"
-        />
-        <div
-          class="uk-text-meta uk-text-nowrap uk-width-small uk-text-right"
-          :class="{ 'uk-visible@s': !_sidebarOpen, 'uk-hidden': _sidebarOpen }"
-          v-text="formDateFromNow(rowItem.mdate)"
-        />
       </oc-grid>
     </div>
   </RecycleScroller>
@@ -48,8 +38,7 @@
 <script>
 import { RecycleScroller } from 'vue-virtual-scroller'
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
-import { buildResource, getResourceSize } from '../helpers/resources'
-import { formDateFromNow } from '../helpers/date'
+import { buildResource } from '../helpers/resources'
 import Resource from './Resource.vue'
 
 export default {
@@ -79,16 +68,6 @@ export default {
   computed: {
     builtResources() {
       return this.resources.map(resource => buildResource(resource))
-    }
-  },
-
-  methods: {
-    getResourceSize(size) {
-      return getResourceSize(size)
-    },
-
-    formDateFromNow(date) {
-      return formDateFromNow(date)
     }
   }
 }

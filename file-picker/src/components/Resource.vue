@@ -19,12 +19,16 @@
           v-text="'.' + item.extension"
         />
       </div>
+      <div class="uk-text-meta">
+        {{ getResourceSize(item.size) }} - Last modified {{ formDateFromNow(item.mdate) }}
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { getResourceIcon } from '../helpers/resources'
+import { getResourceIcon, getResourceSize } from '../helpers/resources'
+import { formDateFromNow } from '../helpers/date'
 
 export default {
   name: 'Resource',
@@ -35,6 +39,7 @@ export default {
       required: true
     }
   },
+
   computed: {
     fileName() {
       return this.item.basename
@@ -54,11 +59,22 @@ export default {
       return this.indicators.length > 0
     }
   },
+
   mounted() {
     if (this.displayPreview) {
       this.loadPreview()
     } else {
       this.previewLoaded = 'disabled'
+    }
+  },
+
+  methods: {
+    getResourceSize(size) {
+      return getResourceSize(size)
+    },
+
+    formDateFromNow(date) {
+      return formDateFromNow(date)
     }
   }
 }
