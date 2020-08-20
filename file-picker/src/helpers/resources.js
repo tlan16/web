@@ -1,5 +1,6 @@
 import moment from 'moment'
 import { uniqueId, chain } from 'lodash'
+import filesize from 'filesize'
 import fileTypeIconMappings from './fileTypeIconMappings.json'
 
 function _extName(fileName) {
@@ -107,4 +108,21 @@ export function getResourceIcon(resource) {
     if (icon) return `${icon}`
   }
   return 'x-office-document'
+}
+
+export function getResourceSize(size) {
+  if (size < 0) {
+    return ''
+  }
+
+  if (isNaN(size)) {
+    return '?'
+  }
+
+  const mb = 1048576
+
+  // TODO: Pass current language as locale to display correct separator
+  return filesize(size, {
+    round: size < mb ? 0 : 1
+  })
 }

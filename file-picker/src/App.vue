@@ -1,9 +1,13 @@
 <template>
-  <div id="oc-file-picker">
-    <oc-button v-if="!isAuthenticated" key="login-form" variation="primary" @click="authenticate"
+  <div id="oc-file-picker" class="uk-height-1-1">
+    <oc-button
+      v-if="state === 'unauthorized'"
+      key="login-form"
+      variation="primary"
+      @click="authenticate"
       >Log in</oc-button
     >
-    <file-picker key="file-picker" v-else />
+    <file-picker class="oc-border uk-height-1-1" key="file-picker" v-if="state === 'authorized'" />
   </div>
 </template>
 
@@ -20,8 +24,8 @@ export default {
 
   data: () => ({
     authInstance: null,
-    isAuthenticated: false,
-    bearerToken: ''
+    bearerToken: '',
+    state: 'loading'
   }),
 
   created() {
@@ -34,9 +38,8 @@ export default {
 
       config = await config.json()
       this.authInstance = initVueAuthenticate(config)
-      this.isAuthenticated = this.authInstance.isAuthenticated()
 
-      if (this.isAuthenticated) {
+      if (this.authInstance.isAuthenticated()) {
         this.bearerToken = this.authInstance.getToken()
 
         // Init owncloud-sdk
@@ -49,7 +52,13 @@ export default {
             'X-Requested-With': 'XMLHttpRequest'
           }
         })
+
+        this.state = 'authorized'
+
+        return
       }
+
+      this.state = 'unauthorized'
     },
 
     authenticate() {
