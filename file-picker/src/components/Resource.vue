@@ -8,7 +8,7 @@
       class="uk-margin-small-right"
     />
     <div class="uk-width-expand">
-      <div class="file-row-name uk-text-truncate" :filename="item.name">
+      <div class="file-row-name uk-text-truncate" :filename="item.name" @click="navigate">
         <span
           class="uk-text-bold oc-cursor-pointer oc-file-name uk-padding-remove-left"
           role="button"
@@ -75,6 +75,10 @@ export default {
 
     formDateFromNow(date) {
       return formDateFromNow(date)
+    },
+
+    navigate() {
+      this.$emit('navigate', this.item.path)
     }
   }
 }

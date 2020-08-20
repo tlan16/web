@@ -1,9 +1,9 @@
 <template>
   <RecycleScroller
-    v-if="builtResources.length"
+    v-if="resources.length"
     v-slot="{ item: rowItem, index, active }"
-    :key="builtResources.length"
-    :items="builtResources"
+    :key="resources.length"
+    :items="resources"
     :item-size="77"
   >
     <div
@@ -28,7 +28,7 @@
             @change.native="toggleFileSelect(rowItem)"
           />
         </div>
-        <resource :item="rowItem" />
+        <resource :item="rowItem" @navigate="openFolder" />
       </oc-grid>
     </div>
   </RecycleScroller>
@@ -37,7 +37,6 @@
 <script>
 import { RecycleScroller } from 'vue-virtual-scroller'
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
-import { buildResource } from '../helpers/resources'
 import Resource from './Resource.vue'
 
 export default {
@@ -64,9 +63,9 @@ export default {
     }
   },
 
-  computed: {
-    builtResources() {
-      return this.resources.map(resource => buildResource(resource))
+  methods: {
+    openFolder(path) {
+      this.$emit('openFolder', path)
     }
   }
 }
