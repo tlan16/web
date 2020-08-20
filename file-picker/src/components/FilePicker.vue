@@ -1,6 +1,6 @@
 <template>
   <div class="uk-height-1-1 uk-flex uk-flex-column">
-    <list-header :current-folder="currentFolder" />
+    <list-header :current-folder="currentFolder" @openFolder="loadFolder" />
     <div
       v-if="state === 'loading'"
       key="loading-message"
