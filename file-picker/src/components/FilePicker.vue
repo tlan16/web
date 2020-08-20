@@ -1,23 +1,27 @@
 <template>
   <div>
     <div v-if="state === 'loading'" key="loading-message" v-text="'Loading'" />
-    <list-resources
+    <div
+      class="uk-height-1-1 uk-flex uk-flex-column"
       v-if="state === 'loaded'"
       key="resources-list"
-      :resources="resources"
-      :current-folder="currentFolder"
-    />
+    >
+      <list-header :current-folder="currentFolder" />
+      <list-resources class="uk-flex-1" :resources="resources" :current-folder="currentFolder" />
+    </div>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
 import ListResources from './ListResources.vue'
+import ListHeader from './ListHeader.vue'
 
 export default {
   name: 'FilePicker',
 
   components: {
+    ListHeader,
     ListResources
   },
 

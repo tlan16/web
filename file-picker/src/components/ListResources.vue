@@ -3,7 +3,6 @@
     v-if="builtResources.length"
     v-slot="{ item: rowItem, index, active }"
     :key="builtResources.length"
-    class="uk-height-1-1"
     :items="builtResources"
     :item-size="77"
   >
