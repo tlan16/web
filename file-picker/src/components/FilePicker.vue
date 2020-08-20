@@ -15,6 +15,7 @@
       :resources="resources"
       :current-folder="currentFolder"
       @openFolder="loadFolder"
+      @selectResources="selectResources"
     />
   </div>
 </template>
@@ -62,6 +63,10 @@ export default {
           console.error(error)
           this.state = 'failed'
         })
+    },
+
+    selectResources(resource) {
+      this.$emit('selectResources', resource)
     }
   }
 }

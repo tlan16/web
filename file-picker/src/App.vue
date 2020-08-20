@@ -7,7 +7,12 @@
       @click="authenticate"
       >Log in</oc-button
     >
-    <file-picker class="oc-border uk-height-1-1" key="file-picker" v-if="state === 'authorized'" />
+    <file-picker
+      class="oc-border uk-height-1-1"
+      key="file-picker"
+      v-if="state === 'authorized'"
+      @selectResources="selectResources"
+    />
   </div>
 </template>
 
@@ -63,6 +68,10 @@ export default {
 
     authenticate() {
       this.authInstance.authenticate()
+    },
+
+    selectResources(resources) {
+      this.$emit('selectResources', resources)
     }
   }
 }

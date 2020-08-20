@@ -17,6 +17,7 @@
         gutter="small"
         flex
         class="uk-padding-small oc-border-top"
+        @click="selectResource(rowItem)"
       >
         <div v-if="checkboxEnabled">
           <oc-checkbox
@@ -66,6 +67,10 @@ export default {
   methods: {
     openFolder(path) {
       this.$emit('openFolder', path)
+    },
+
+    selectResource(resource) {
+      this.$emit('selectResources', resource)
     }
   }
 }
