@@ -1,5 +1,10 @@
 <template>
-  <div class="oc-file uk-flex-inline uk-flex-middle uk-width-auto">
+  <!-- FIXME: oc-file class is adding underline effect which is not desired when the resource type is file
+  Adding this class only when it's folder looks wrong though -->
+  <div
+    class="uk-flex-inline uk-flex-middle uk-width-auto"
+    :class="{ 'oc-file': item.type === 'folder' }"
+  >
     <oc-icon
       key="resource-icon"
       :name="resourceIcon"
@@ -78,6 +83,10 @@ export default {
     },
 
     navigate() {
+      if (this.item.type !== 'folder') {
+        return
+      }
+
       this.$emit('navigate', this.item.path)
     }
   }
