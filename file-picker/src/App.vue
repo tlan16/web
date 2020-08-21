@@ -4,7 +4,7 @@
       v-if="state === 'loading'"
       class="uk-height-1-1 uk-width-1-1 uk-flex uk-flex-middle uk-flex-center oc-border"
     >
-      <oc-spinner label="Loading ownCloud file picker" />
+      <oc-spinner aria-label="Loading ownCloud file picker" />
     </div>
     <login v-if="state === 'unauthorized'" key="login-form" @login="authenticate" />
     <file-picker
@@ -39,40 +39,54 @@ export default {
   data: () => ({
     authInstance: null,
     bearerToken: '',
-    state: 'loading'
+    state: 'loading',
+    config: null
   }),
 
   created() {
-    this.init()
+    this.checkAuthorization()
+  },
+
+  beforeDestroy() {
+    this.authInstance.mgr.events.removeUserLoaded()
   },
 
   methods: {
-    async init() {
+    init() {
+      this.bearerToken = this.authInstance.getToken()
+
+      // Init owncloud-sdk
+      this.$client.init({
+        baseUrl: this.config.server,
+        auth: {
+          bearer: this.bearerToken
+        },
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest'
+        }
+      })
+
+      this.state = 'authorized'
+
+      return
+    },
+
+    async checkAuthorization() {
       let config = await fetch(window.location.origin + '/file-picker-config.json')
 
-      config = await config.json()
-      this.authInstance = initVueAuthenticate(config)
+      this.config = await config.json()
+      this.authInstance = initVueAuthenticate(this.config)
 
       if (this.authInstance.isAuthenticated()) {
-        this.bearerToken = this.authInstance.getToken()
-
-        // Init owncloud-sdk
-        this.$client.init({
-          baseUrl: config.server,
-          auth: {
-            bearer: this.bearerToken
-          },
-          headers: {
-            'X-Requested-With': 'XMLHttpRequest'
-          }
-        })
-
-        this.state = 'authorized'
-
-        return
+        return this.init()
       }
 
       this.state = 'unauthorized'
+
+      // Add event listener when user logs in
+      this.authInstance.mgr.events.addUserLoaded(() => {
+        this.init()
+      })
     },
 
     authenticate() {
