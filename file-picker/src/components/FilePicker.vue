@@ -27,7 +27,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import { buildResource } from '../helpers/resources'
 import ListResources from './ListResources.vue'
 import ListHeader from './ListHeader.vue'
@@ -45,15 +44,25 @@ export default {
     resources: [],
     currentFolder: null,
     isSelectBtnEnabled: false,
-    selectedResources: []
+    selectedResources: [],
+    davProperties: [
+      '{http://owncloud.org/ns}permissions',
+      '{http://owncloud.org/ns}favorite',
+      '{http://owncloud.org/ns}fileid',
+      '{http://owncloud.org/ns}owner-id',
+      '{http://owncloud.org/ns}owner-display-name',
+      '{http://owncloud.org/ns}share-types',
+      '{http://owncloud.org/ns}privatelink',
+      '{DAV:}getcontentlength',
+      '{http://owncloud.org/ns}size',
+      '{DAV:}getlastmodified',
+      '{DAV:}getetag',
+      '{DAV:}resourcetype'
+    ]
   }),
 
   created() {
     this.loadFolder('/')
-  },
-
-  computed: {
-    ...mapState(['davProperties'])
   },
 
   methods: {
