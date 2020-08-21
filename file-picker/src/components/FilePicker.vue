@@ -1,6 +1,11 @@
 <template>
   <div class="uk-height-1-1 uk-flex uk-flex-column">
-    <list-header :current-folder="currentFolder" @openFolder="loadFolder" />
+    <list-header
+      :current-folder="currentFolder"
+      :is-select-btn-enabled="isSelectBtnEnabled"
+      @openFolder="loadFolder"
+      @select="emitSelectedResources"
+    />
     <div
       v-if="state === 'loading'"
       key="loading-message"
@@ -38,7 +43,9 @@ export default {
   data: () => ({
     state: 'loading',
     resources: [],
-    currentFolder: null
+    currentFolder: null,
+    isSelectBtnEnabled: false,
+    selectedResources: []
   }),
 
   created() {
@@ -66,8 +73,18 @@ export default {
         })
     },
 
-    selectResources(resource) {
-      this.$emit('selectResources', resource)
+    selectResources(resources) {
+      if (resources.length > 0) {
+        this.isSelectBtnEnabled = true
+      } else {
+        this.isSelectBtnEnabled = false
+      }
+
+      this.selectedResources = resources
+    },
+
+    emitSelectedResources() {
+      this.$emit('selectResources', this.selectedResources)
     }
   }
 }

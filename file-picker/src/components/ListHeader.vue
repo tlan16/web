@@ -1,7 +1,18 @@
 <template>
-  <header class="uk-background-muted uk-padding-small">
-    <h1>ownCloud</h1>
-    <oc-breadcrumb :items="breadcrumbsItems" />
+  <header class="uk-background-muted uk-padding-small uk-flex uk-flex-middle uk-flex-between">
+    <div>
+      <h1 class="uk-margin-small-bottom">ownCloud</h1>
+      <oc-breadcrumb :items="breadcrumbsItems" />
+    </div>
+    <div>
+      <oc-button
+        variation="primary"
+        :disabled="!isSelectBtnEnabled"
+        :uk-tooltip="disabledSelectBtnTooltip"
+        @click.native="select"
+        >Select resources</oc-button
+      >
+    </div>
   </header>
 </template>
 
@@ -15,6 +26,10 @@ export default {
     currentFolder: {
       type: Object,
       required: false
+    },
+    isSelectBtnEnabled: {
+      type: Boolean,
+      required: true
     }
   },
 
@@ -48,12 +63,24 @@ export default {
       }
 
       return breadcrumbs
+    },
+
+    disabledSelectBtnTooltip() {
+      if (this.isSelectBtnEnabled) {
+        return null
+      }
+
+      return 'Please select at least one resource. You can select a resource by clicking on its row or via its checkbox.'
     }
   },
 
   methods: {
     openFolder(path) {
       this.$emit('openFolder', path)
+    },
+
+    select() {
+      this.$emit('select')
     }
   }
 }
