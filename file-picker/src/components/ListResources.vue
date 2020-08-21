@@ -4,7 +4,7 @@
     v-slot="{ item: rowItem, index, active }"
     :key="resources.length"
     :items="resources"
-    :item-size="77"
+    :item-size="68"
   >
     <div
       :key="rowItem.viewId"
@@ -37,7 +37,6 @@
 
 <script>
 import { RecycleScroller } from 'vue-virtual-scroller'
-import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 import Resource from './Resource.vue'
 
 export default {
@@ -93,3 +92,7 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+@import '../../node_modules/vue-virtual-scroller/dist/vue-virtual-scroller.css';
+</style>
