@@ -1,12 +1,12 @@
 <template>
   <div id="oc-file-picker" class="uk-height-1-1">
-    <oc-button
-      v-if="state === 'unauthorized'"
-      key="login-form"
-      variation="primary"
-      @click="authenticate"
-      >Log in</oc-button
+    <div
+      v-if="state === 'loading'"
+      class="uk-height-1-1 uk-width-1-1 uk-flex uk-flex-middle uk-flex-center oc-border"
     >
+      <oc-spinner label="Loading ownCloud file picker" />
+    </div>
+    <login v-if="state === 'unauthorized'" key="login-form" @login="authenticate" />
     <file-picker
       class="oc-border uk-height-1-1"
       key="file-picker"
@@ -22,6 +22,7 @@ import sdk from 'owncloud-sdk'
 import DesignSystem from 'owncloud-design-system'
 import initVueAuthenticate from './services/auth'
 import FilePicker from './components/FilePicker.vue'
+import Login from './components/Login.vue'
 
 // Init sdk and design system
 Vue.prototype.$client = new sdk()
@@ -31,7 +32,8 @@ export default {
   name: 'App',
 
   components: {
-    FilePicker
+    FilePicker,
+    Login
   },
 
   data: () => ({
