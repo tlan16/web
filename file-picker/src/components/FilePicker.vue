@@ -14,6 +14,7 @@
       class="uk-flex-1"
       :resources="resources"
       :current-folder="currentFolder"
+      :checkbox-enabled="true"
       @openFolder="loadFolder"
       @selectResources="selectResources"
     />

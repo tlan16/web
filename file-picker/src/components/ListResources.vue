@@ -22,14 +22,14 @@
         <div v-if="checkboxEnabled">
           <oc-checkbox
             class="uk-margin-small-left"
-            :value="selectedFiles.indexOf(rowItem) >= 0"
-            :label="labelSelectSingleItem(rowItem)"
+            :value="isResourceSelected(rowItem)"
+            :label="selectCheckboxLabel(rowItem.name)"
             :hide-label="true"
             @click.stop
-            @change.native="toggleFileSelect(rowItem)"
+            @change.native="selectResource(rowItem)"
           />
         </div>
-        <resource :item="rowItem" @navigate="openFolder" />
+        <resource class="uk-width-expand" :item="rowItem" @navigate="openFolder" />
       </oc-grid>
     </div>
   </RecycleScroller>
@@ -64,13 +64,31 @@ export default {
     }
   },
 
+  data: () => ({
+    selectedResources: []
+  }),
+
   methods: {
     openFolder(path) {
       this.$emit('openFolder', path)
     },
 
     selectResource(resource) {
-      this.$emit('selectResources', resource)
+      if (this.isResourceSelected(resource)) {
+        this.selectedResources.splice(this.selectedResources.indexOf(resource), 1)
+      } else {
+        this.selectedResources.push(resource)
+      }
+
+      this.$emit('selectResources', this.selectedResources)
+    },
+
+    selectCheckboxLabel(name) {
+      return `Select ${name}`
+    },
+
+    isResourceSelected(resource) {
+      return this.selectedResources.indexOf(resource) > -1
     }
   }
 }

@@ -1,10 +1,7 @@
 <template>
   <!-- FIXME: oc-file class is adding underline effect which is not desired when the resource type is file
   Adding this class only when it's folder looks wrong though -->
-  <div
-    class="uk-flex-inline uk-flex-middle uk-width-auto"
-    :class="{ 'oc-file': item.type === 'folder' }"
-  >
+  <div class="uk-flex-inline uk-flex-middle" :class="{ 'oc-file': item.type === 'folder' }">
     <oc-icon
       key="resource-icon"
       :name="resourceIcon"
