@@ -9,7 +9,11 @@
     <div
       :key="rowItem.viewId"
       :data-is-visible="active"
-      :class="{ 'files-list-row-disabled': false }"
+      :class="{
+        'files-list-row-disabled': false,
+        'oc-background-selected': isResourceSelected(rowItem)
+      }"
+      @click="selectResource(rowItem)"
     >
       <oc-grid
         :id="'file-row-' + rowItem.id"
