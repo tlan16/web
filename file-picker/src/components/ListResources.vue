@@ -30,7 +30,7 @@
             @change.native="selectResource(rowItem)"
           />
         </div>
-        <resource :item="rowItem" @navigate="openFolder" />
+        <resource class="uk-width-auto" :item="rowItem" @navigate="openFolder" />
       </oc-grid>
     </div>
   </RecycleScroller>
