@@ -16,7 +16,7 @@
     <list-resources
       v-if="state === 'loaded'"
       key="resources-list"
-      class="uk-flex-1"
+      class="uk-flex-1 oc-border"
       :resources="resources"
       :current-folder="currentFolder"
       :checkbox-enabled="true"

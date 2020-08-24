@@ -1,8 +1,8 @@
 <template>
-  <header class="uk-background-muted uk-padding-small uk-flex uk-flex-middle uk-flex-between">
+  <header class="uk-background-primary uk-padding-small uk-flex uk-flex-middle uk-flex-between">
     <div>
-      <h1 class="uk-margin-small-bottom">ownCloud</h1>
-      <oc-breadcrumb :items="breadcrumbsItems" />
+      <h1 class="uk-margin-small-bottom oc-light">ownCloud</h1>
+      <oc-breadcrumb class="oc-light" :items="breadcrumbsItems" />
     </div>
     <div>
       <oc-button
@@ -85,3 +85,9 @@ export default {
   }
 }
 </script>
+
+<style>
+.oc-light .oc-breadcrumb-list-item > a {
+  color: white;
+}
+</style>

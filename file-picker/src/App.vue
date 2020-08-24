@@ -8,7 +8,7 @@
     </div>
     <login v-if="state === 'unauthorized'" key="login-form" @login="authenticate" />
     <file-picker
-      class="oc-border uk-height-1-1"
+      class="uk-height-1-1"
       key="file-picker"
       v-if="state === 'authorized'"
       @selectResources="selectResources"
