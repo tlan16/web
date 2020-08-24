@@ -3,6 +3,7 @@
     <list-header
       :current-folder="currentFolder"
       :is-select-btn-enabled="isSelectBtnEnabled"
+      :is-location-picker="variation === 'location'"
       @openFolder="loadFolder"
       @select="emitSelectedResources"
     />
@@ -19,7 +20,7 @@
       class="uk-flex-1 oc-border"
       :resources="resources"
       :current-folder="currentFolder"
-      :checkbox-enabled="true"
+      :is-location-picker="variation === 'location'"
       @openFolder="loadFolder"
       @selectResources="selectResources"
     />
@@ -37,6 +38,14 @@ export default {
   components: {
     ListHeader,
     ListResources
+  },
+
+  props: {
+    variation: {
+      type: String,
+      required: true,
+      validator: value => value === 'resource' || 'location'
+    }
   },
 
   data: () => ({

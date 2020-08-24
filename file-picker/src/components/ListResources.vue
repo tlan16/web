@@ -9,11 +9,7 @@
     <div
       :key="rowItem.viewId"
       :data-is-visible="active"
-      :class="{
-        'files-list-row-disabled': false,
-        'oc-background-selected': isResourceSelected(rowItem)
-      }"
-      class="oc-cursor-pointer"
+      :class="rowClasses(rowItem)"
       @click="selectResource(rowItem)"
     >
       <oc-grid
@@ -24,7 +20,7 @@
         class="uk-padding-small oc-border-top"
         @click="selectResource(rowItem)"
       >
-        <div v-if="checkboxEnabled">
+        <div v-if="!isLocationPicker">
           <oc-checkbox
             class="uk-margin-small-left"
             :value="isResourceSelected(rowItem)"
@@ -57,7 +53,7 @@ export default {
       type: Array,
       required: true
     },
-    checkboxEnabled: {
+    isLocationPicker: {
       type: Boolean,
       required: false,
       default: false
@@ -78,6 +74,17 @@ export default {
     },
 
     selectResource(resource) {
+      if (this.isRowDisabled(resource)) {
+        return
+      }
+
+      if (this.isLocationPicker) {
+        // Pass as an array so the final product doesn't have to differentiate between two different types
+        this.selectedResources = [resource]
+
+        return this.$emit('selectResources', this.selectedResources)
+      }
+
       if (this.isResourceSelected(resource)) {
         this.selectedResources.splice(this.selectedResources.indexOf(resource), 1)
       } else {
@@ -93,6 +100,28 @@ export default {
 
     isResourceSelected(resource) {
       return this.selectedResources.indexOf(resource) > -1
+    },
+
+    isRowDisabled(resource) {
+      if (this.isLocationPicker) {
+        return resource.type !== 'folder' || resource.canCreate() === false
+      }
+
+      return resource.canShare() === false
+    },
+
+    rowClasses(resource) {
+      const classes = []
+
+      if (this.isResourceSelected(resource)) {
+        classes.push('oc-background-selected')
+      }
+
+      this.isRowDisabled(resource)
+        ? classes.push('files-list-row-disabled')
+        : classes.push('oc-cursor-pointer')
+
+      return classes
     }
   }
 }
@@ -100,4 +129,9 @@ export default {
 
 <style scoped>
 @import '../../node_modules/vue-virtual-scroller/dist/vue-virtual-scroller.css';
+
+.files-list-row-disabled {
+  opacity: 0.3;
+  pointer-events: none;
+}
 </style>

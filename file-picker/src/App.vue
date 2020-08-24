@@ -11,6 +11,7 @@
       class="uk-height-1-1"
       key="file-picker"
       v-if="state === 'authorized'"
+      :variation="variation"
       @selectResources="selectResources"
     />
   </div>
@@ -34,6 +35,14 @@ export default {
   components: {
     FilePicker,
     Login
+  },
+
+  props: {
+    variation: {
+      type: String,
+      required: true,
+      validator: value => value === 'resource' || value === 'location'
+    }
   },
 
   data: () => ({

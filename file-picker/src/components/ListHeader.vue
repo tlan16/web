@@ -10,8 +10,9 @@
         :disabled="!isSelectBtnEnabled"
         :uk-tooltip="disabledSelectBtnTooltip"
         @click.native="select"
-        >Select resources</oc-button
       >
+        {{ isLocationPicker ? 'Select location' : 'Select resources' }}
+      </oc-button>
     </div>
   </header>
 </template>
@@ -28,6 +29,10 @@ export default {
       required: false
     },
     isSelectBtnEnabled: {
+      type: Boolean,
+      required: true
+    },
+    isLocationPicker: {
       type: Boolean,
       required: true
     }
