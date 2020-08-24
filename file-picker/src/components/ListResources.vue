@@ -13,6 +13,7 @@
         'files-list-row-disabled': false,
         'oc-background-selected': isResourceSelected(rowItem)
       }"
+      class="oc-cursor-pointer"
       @click="selectResource(rowItem)"
     >
       <oc-grid
@@ -33,7 +34,7 @@
             @change.native="selectResource(rowItem)"
           />
         </div>
-        <resource class="uk-width-expand" :item="rowItem" @navigate="openFolder" />
+        <resource :item="rowItem" @navigate="openFolder" />
       </oc-grid>
     </div>
   </RecycleScroller>
