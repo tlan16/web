@@ -3,7 +3,7 @@
     v-if="resources.length"
     v-slot="{ item: rowItem, index, active }"
     :key="resources.length"
-    :items="resources"
+    :items="resourcesSorted"
     :item-size="68"
   >
     <div
@@ -38,6 +38,7 @@
 
 <script>
 import { RecycleScroller } from 'vue-virtual-scroller'
+import { sortByName } from '../helpers/sort'
 import Resource from './Resource.vue'
 
 export default {
@@ -67,6 +68,12 @@ export default {
   data: () => ({
     selectedResources: []
   }),
+
+  computed: {
+    resourcesSorted() {
+      return this.sortResources(this.resources)
+    }
+  },
 
   methods: {
     openFolder(path) {
@@ -122,6 +129,10 @@ export default {
         : classes.push('oc-cursor-pointer')
 
       return classes
+    },
+
+    sortResources(resources) {
+      return resources.sort(sortByName)
     }
   }
 }
