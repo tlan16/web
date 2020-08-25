@@ -37,6 +37,11 @@ function createUser(userId, password, displayName = false, email = false) {
   const url = 'cloud/users'
   return httpHelper
     .postOCS(url, 'admin', body)
+    .then(res => {
+      console.log(res)
+      return res.json()
+    })
+    .then(json => console.log(json))
     .then(() => {
       if (client.globals.ocis) {
         const skelDir = client.globals.ocis_skeleton_dir
