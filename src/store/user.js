@@ -61,8 +61,8 @@ const actions = {
       logoutFinalizer(true)
     }
   },
-  async initAuth(context, payload = { autoRedirect: false }) {
-    const init = async (client, token, doLogin = true) => {
+  async initAuth(context, autoRedirect, client) {
+    const init = async (token, doLogin = true) => {
       const instance = context.rootState.config.server || window.location.origin
       const options = {
         baseUrl: instance,
@@ -110,7 +110,7 @@ const actions = {
         await context.dispatch('loadSettingsValues')
         context.commit('SET_USER_READY', true)
 
-        if (payload.autoRedirect) {
+        if (autoRedirect) {
           router.push({ path: '/' })
         }
       } else {
@@ -120,7 +120,6 @@ const actions = {
     // if called from login, use available vue-authenticate instance; else re-init
     if (!vueAuthInstance) {
       vueAuthInstance = initVueAuthenticate(context.rootState.config)
-      const client = this._vm.$client
       vueAuthInstance.events().addAccessTokenExpired(function() {
         console.log('AccessToken Expired：', arguments)
       })
@@ -133,7 +132,7 @@ const actions = {
             user.refresh_token
           }`
         )
-        init(client, user.access_token, false)
+        init(user.access_token, false)
       })
       vueAuthInstance.events().addUserUnloaded(() => {
         console.log('user unloaded…')
@@ -148,25 +147,25 @@ const actions = {
     }
     const token = vueAuthInstance.getToken()
     if (token) {
-      await init(this._vm.$client, token)
+      await init(token)
     }
   },
-  login(context, payload = { provider: 'oauth2' }) {
+  login(context, provider = 'oauth2') {
     // reset vue-authenticate
     vueAuthInstance = initVueAuthenticate(context.rootState.config)
-    vueAuthInstance.authenticate(payload.provider, {}, {}).then(() => {
+    vueAuthInstance.authenticate(provider, {}, {}).then(() => {
       if (vueAuthInstance.isAuthenticated) {
         context.dispatch('initAuth')
       }
     })
   },
-  callback(context) {
+  callback(context, client) {
     if (!vueAuthInstance) vueAuthInstance = initVueAuthenticate(context.rootState.config)
     vueAuthInstance.mgr
       .signinRedirectCallback()
       .then(() => {
         const autoRedirect = true
-        context.dispatch('initAuth', { autoRedirect })
+        context.dispatch('initAuth', autoRedirect, client)
       })
       .catch(e => {
         console.warn('error in OpenIdConnect:', e)

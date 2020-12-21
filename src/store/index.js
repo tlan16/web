@@ -1,5 +1,4 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import { createStore } from 'vuex'
 import VuexPersistence from 'vuex-persist'
 
 /* STORE MODULES
@@ -13,8 +12,6 @@ import settings from './settings'
 import modal from './modal'
 import navigation from './navigation'
 import sidebar from './sidebar'
-
-Vue.use(Vuex)
 
 const vuexPersistInSession = new VuexPersistence({
   key: 'webStateInSessionStorage',
@@ -31,7 +28,7 @@ const vuexPersistInSession = new VuexPersistence({
 
 const strict = process.env.NODE_ENV === 'development'
 
-export const Store = new Vuex.Store({
+export const Store = createStore({
   plugins: [vuexPersistInSession.plugin],
   modules: {
     app,

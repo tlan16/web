@@ -1,5 +1,4 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import LoginPage from '../pages/login.vue'
 import OidcCallbackPage from '../pages/oidcCallback.vue'
 import AccessDeniedPage from '../pages/accessDenied.vue'
@@ -7,10 +6,8 @@ import Account from '../pages/account.vue'
 
 import store from '../store'
 
-Vue.use(Router)
-
-const router = new Router({
-  //  mode: 'history',
+const router = createRouter({
+  history: createWebHashHistory(),
   routes: [
     {
       path: '/login',

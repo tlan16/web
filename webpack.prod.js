@@ -24,11 +24,5 @@ module.exports = merge(common, {
       to: 'oidc-silent-redirect.html'
     }])
   ],
-  mode: 'production',
-  devtool: 'none',
-  resolve: {
-    alias: {
-      vue: 'vue/dist/vue.min.js'
-    }
-  }
+  mode: 'production'
 })

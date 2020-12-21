@@ -65,7 +65,7 @@ export default {
       if (this.$route.path === '/oidc-silent-redirect') {
         this.signinSilentCallback()
       } else {
-        this.callback()
+        this.callback(this.$client)
       }
     })
   },

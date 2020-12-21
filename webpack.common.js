@@ -1,7 +1,8 @@
+const webpack = require('webpack')
 const path = require('path')
 const fs = require('fs')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const VueLoaderPlugin = require('vue-loader/lib/plugin')
+const { VueLoaderPlugin } = require('vue-loader')
 const WebpackCopyPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const WebpackVersionFilePlugin = require('webpack-version-file-plugin')
@@ -59,7 +60,8 @@ module.exports = {
     }),
     new WebpackCopyPlugin(apps),
     new HtmlWebpackPlugin({
-      template: 'index.html'
+      template: 'index.html',
+      process
     }),
     new VueLoaderPlugin(),
     new MiniCssExtractPlugin({
@@ -67,7 +69,10 @@ module.exports = {
       // both options are optional
       filename: 'css/[name].css',
       chunkFilename: 'css/[name].[id].css'
-    })
+    }),
+    new webpack.ProvidePlugin({
+      process: 'process/browser',
+    }),
   ],
   entry: {
     core: ['whatwg-fetch', './src/web.js']
@@ -76,31 +81,21 @@ module.exports = {
     filename: 'core/[name].bundle.js',
     chunkFilename: 'core/[name].[id].bundle.js'
   },
+  resolve: {
+    alias: {
+      vue: "@vue/runtime-dom"
+    },
+    fallback: {
+      "crypto": require.resolve("crypto-browserify"),
+      "stream": require.resolve("stream-browserify")
+    }
+  },
   module: {
     rules: [
       {
         test: /\.js$/,
         use: 'babel-loader',
-        include: path.resolve(__dirname, './src')
-      },
-      {
-        test: /\.jsx?$/,
-        include: /node_modules\/(?=(vuex-persist)\/).*/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: [
-              [
-                '@babel/preset-env',
-                {
-                  targets: {
-                    ie: '11'
-                  }
-                }
-              ]
-            ]
-          }
-        }
+        include: path.resolve(__dirname, 'src')
       },
       {
         test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
@@ -133,7 +128,7 @@ module.exports = {
       {
         test: /\.(sa|sc|c)ss$/,
         include: [/node_modules/, /src/, /static/],
-        use: ['style-loader', MiniCssExtractPlugin.loader, 'css-loader']
+        use: [MiniCssExtractPlugin.loader, 'css-loader']
       }
     ]
   }

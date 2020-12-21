@@ -1,4 +1,4 @@
-const VueLoaderPlugin = require('vue-loader/lib/plugin')
+const { VueLoaderPlugin } = require('vue-loader')
 
 module.exports = {
   plugins: [
@@ -32,14 +32,7 @@ module.exports = {
         loader: 'babel-loader',
         options: {
           presets: [
-            [
-              '@babel/preset-env',
-              {
-                targets: {
-                  ie: '11'
-                }
-              }
-            ]
+            ['@babel/preset-env',]
           ]
         }
       }

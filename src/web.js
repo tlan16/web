@@ -2,9 +2,9 @@
 import 'regenerator-runtime/runtime'
 
 // --- Libraries and Plugins ---
-import Vue from './vue'
-import 'vue-resize/dist/vue-resize.css'
-import VueResize from 'vue-resize'
+import { createApp } from 'vue'
+import 'vue3-resize/dist/vue3-resize.css'
+import Vue3Resize from 'vue3-resize'
 
 // --- Components ---
 import App from './App.vue'
@@ -18,15 +18,13 @@ import store from './store'
 import router from './router'
 
 // --- Plugins ----
-import VueEvents from 'vue-events'
-import VueRouter from 'vue-router'
 import VueClipboard from 'vue-clipboard2'
 import VueScrollTo from 'vue-scrollto'
 import VueMeta from 'vue-meta'
 import Vue2TouchEvents from 'vue2-touch-events'
 
 // --- Gettext ----
-import GetTextPlugin from 'vue-gettext'
+import { createGettext } from "@jshmrtn/vue3-gettext";
 import coreTranslations from '../l10n/translations.json'
 
 // --- Image source ----
@@ -43,34 +41,7 @@ import 'owncloud-design-system/dist/system/system.css'
 
 import Avatar from './components/Avatar.vue'
 
-import wgxpath from 'wicked-good-xpath'
-
 import { registerClient } from './services/clientRegistration'
-
-wgxpath.install()
-
-Vue.prototype.$client = new OwnCloud()
-
-Vue.use(VueEvents)
-Vue.use(VueRouter)
-Vue.use(DesignSystem)
-Vue.use(VueClipboard)
-Vue.use(VueScrollTo)
-Vue.use(MediaSource)
-Vue.use(WebPlugin)
-Vue.use(VueResize)
-Vue.use(VueMeta, {
-  // optional pluginOptions
-  refreshOnceOnNavigation: true
-})
-Vue.use(ChunkedUpload)
-Vue.use(Vue2TouchEvents)
-
-Vue.component('drag', Drag)
-Vue.component('drop', Drop)
-Vue.component('avatar-image', Avatar)
-
-// --- Router ----
 
 let apps
 let config
@@ -114,7 +85,7 @@ async function loadApp (path) {
             }
           })
         }
-        router.addRoutes(app.routes)
+        router.addRoute(app.routes)
       }
 
       if (app.navItems) {
@@ -154,7 +125,7 @@ async function finalizeInit () {
   if (!defaultExtensionId || appIds.indexOf(defaultExtensionId) < 0) {
     defaultExtensionId = appIds[0]
   }
-  router.addRoutes([{
+  router.addRoute([{
     path: '/',
     redirect: () => store.getters.getNavItemsByExtension(defaultExtensionId)[0].route
   }])
@@ -165,19 +136,47 @@ async function finalizeInit () {
   // inject custom config into vuex
   await store.dispatch('loadConfig', config)
 
-  // basic init of ownCloud sdk
-  Vue.prototype.$client.init({ baseUrl: config.server || window.location.origin })
-
   // inject custom theme config into vuex
   await fetchTheme()
 
-  loadTranslations()
-  new Vue({
-    el: '#owncloud',
+  const app = createApp(App, {
     store,
-    router,
-    render: h => h(App)
+    router
   })
+
+  app.config.globalProperties.$client = new OwnCloud()
+
+  app.component('drag', Drag)
+  app.component('drop', Drop)
+  app.component('avatar-image', Avatar)
+
+  // basic init of ownCloud sdk
+  app.config.globalProperties.$client.init({ baseUrl: config.server || window.location.origin })
+
+  const gettext = createGettext({
+    availableLanguages: supportedLanguages,
+    defaultLanguage: navigator.language.substring(0, 2),
+    translations,
+    silent: true
+  });
+
+  app.use(store)
+  app.use(router)
+  app.use(gettext)
+  // app.use(DesignSystem)
+  // app.use(VueClipboard)
+  // app.use(VueScrollTo)
+  // app.use(MediaSource)
+  // app.use(WebPlugin)
+  // app.use(Vue3Resize)
+  // app.use(VueMeta, {
+  //   // optional pluginOptions
+  //   refreshOnceOnNavigation: true
+  // })
+  // app.use(ChunkedUpload)
+  // app.use(Vue2TouchEvents)
+
+  app.mount('#owncloud')
 }
 
 function fetchTheme() {
@@ -192,21 +191,12 @@ function fetchTheme() {
 }
 
 function missingConfig () {
-  loadTranslations()
-  new Vue({
-    el: '#owncloud',
-    store,
-    render: h => h(missingConfigPage)
-  })
-}
-
-function loadTranslations () {
-  Vue.use(GetTextPlugin, {
-    availableLanguages: supportedLanguages,
-    defaultLanguage: navigator.language.substring(0, 2),
-    translations,
-    silent: true
-  })
+  // loadTranslations()
+  // new Vue({
+  //   el: '#owncloud',
+  //   store,
+  //   render: h => h(missingConfigPage)
+  // })
 }
 
 (async function () {

@@ -41,7 +41,7 @@
         </oc-button>
       </div>
       <div>
-        <oc-button v-if="saving" key="edit-collaborator-saving-button" :disabled="true">
+        <oc-button v-if="saving" key="edit-collaborator-saving-button-in-progress" :disabled="true">
           <oc-spinner :aria-label="$gettext('Saving Share')" size="small" />
           <span v-translate :aria-hidden="true">Saving Share</span>
         </oc-button>
