@@ -209,7 +209,7 @@ export default {
     this.setCurrentFile(filePath)
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     document.removeEventListener('keyup', this.handleKeyPress)
 
     window.removeEventListener('popstate', this.handleLocalHistoryEvent)

@@ -79,6 +79,14 @@
         />
       </transition>
     </div>
+    <teleport to="head">
+      <title>{{ productName }}</title>
+
+      <template v-if="favicon">
+        <!-- eslint-disable-next-line prettier/prettier -->
+        <link rel="shortcut icon" :href="favicon">
+      </template>
+    </teleport>
   </div>
 </template>
 <script>
@@ -248,24 +256,14 @@ export default {
     }
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     window.removeEventListener('resize', this.onResize)
   },
 
-  destroyed() {
+  unmounted() {
     if (this.$_notificationsInterval) {
       clearInterval(this.$_notificationsInterval)
     }
-  },
-
-  metaInfo() {
-    const metaInfo = {
-      title: this.configuration.theme.general.name
-    }
-    if (this.favicon) {
-      metaInfo.link = [{ rel: 'icon', href: this.favicon }]
-    }
-    return metaInfo
   },
 
   mounted() {
@@ -275,12 +273,8 @@ export default {
     })
   },
 
-  beforeMount() {
-    this.initAuth()
-  },
-
   methods: {
-    ...mapActions(['initAuth', 'fetchNotifications', 'deleteMessage']),
+    ...mapActions(['fetchNotifications', 'deleteMessage']),
 
     hideAppNavigation() {
       this.appNavigationVisible = false

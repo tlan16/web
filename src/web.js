@@ -18,9 +18,8 @@ import store from './store'
 import router from './router'
 
 // --- Plugins ----
-import VueClipboard from 'vue-clipboard2'
+import VueClipboard from '@soerenmartius/vue3-clipboard'
 import VueScrollTo from 'vue-scrollto'
-import VueMeta from 'vue-meta'
 import Vue2TouchEvents from 'vue2-touch-events'
 
 // --- Gettext ----
@@ -42,9 +41,11 @@ import 'owncloud-design-system/dist/system/system.css'
 import Avatar from './components/Avatar.vue'
 
 import { registerClient } from './services/clientRegistration'
+import initVueAuthenticate from './services/auth'
 
 let apps
 let config
+let auth
 const supportedLanguages = {
   en: 'English',
   de: 'Deutsch',
@@ -145,6 +146,7 @@ async function finalizeInit () {
   })
 
   app.config.globalProperties.$client = new OwnCloud()
+  app.config.globalProperties.$auth = auth
 
   app.component('drag', Drag)
   app.component('drop', Drop)
@@ -163,18 +165,14 @@ async function finalizeInit () {
   app.use(store)
   app.use(router)
   app.use(gettext)
-  // app.use(DesignSystem)
-  // app.use(VueClipboard)
-  // app.use(VueScrollTo)
-  // app.use(MediaSource)
-  // app.use(WebPlugin)
-  // app.use(Vue3Resize)
-  // app.use(VueMeta, {
-  //   // optional pluginOptions
-  //   refreshOnceOnNavigation: true
-  // })
-  // app.use(ChunkedUpload)
-  // app.use(Vue2TouchEvents)
+  app.use(DesignSystem)
+  app.use(VueClipboard)
+  app.use(VueScrollTo)
+  app.use(MediaSource)
+  app.use(WebPlugin)
+  app.use(Vue3Resize)
+  app.use(ChunkedUpload)
+  app.use(Vue2TouchEvents)
 
   app.mount('#owncloud')
 }
@@ -211,6 +209,8 @@ function missingConfig () {
   try {
     config = await config.json()
 
+    initAuth()
+
     // if dynamic client registration is necessary - do this here now
     if (config.openIdConnect && config.openIdConnect.dynamic) {
       const clientData = await registerClient(config.openIdConnect)
@@ -246,3 +246,13 @@ function missingConfig () {
     console.log(err)
   }
 })()
+
+function initAuth() {
+  auth = initVueAuthenticate(config)
+  auth.events().addAccessTokenExpired(function() {
+    console.warn('AccessToken Expired：', arguments)
+  })
+  auth.events().addAccessTokenExpiring(function() {
+    console.warn('AccessToken Expiring：', arguments)
+  })
+}

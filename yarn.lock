@@ -961,6 +961,13 @@
   resolved "https://registry.yarnpkg.com/@sideway/pinpoint/-/pinpoint-2.0.0.tgz#cff8ffadc372ad29fd3f78277aeb29e632cc70df"
   integrity sha512-RNiOoTPkptFtSVzQevY/yWtZwf/RxyVnPy/OcA9HBM3MlGDnBEYL5B41H0MTn0Uec8Hi+2qUtTfG2WWZBmMejQ==
 
+"@soerenmartius/vue3-clipboard@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@soerenmartius/vue3-clipboard/-/vue3-clipboard-0.1.0.tgz#89710fa1f1edc8037b2d93e6965fce105632777d"
+  integrity sha512-G6qhBizldcz5dyBZDprD2ZKB9D8kyyvLAePdWA7lKVBuSbkX4zuFx2jJlcIMUfq6/+pFDoGnVldhuCe3OFjjIQ==
+  dependencies:
+    clipboard "^2.0.0"
+
 "@testim/chrome-version@^1.0.7":
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/@testim/chrome-version/-/chrome-version-1.0.7.tgz#0cd915785ec4190f08a3a6acc9b61fc38fb5f1a9"
@@ -9839,17 +9846,17 @@ void-elements@^2.0.1:
   resolved "https://registry.yarnpkg.com/void-elements/-/void-elements-2.0.1.tgz#c066afb582bb1cb4128d60ea92392e94d5e9dbec"
   integrity sha1-wGavtYK7HLQSjWDqkjkulNXp2+w=
 
+vue-3-meta@^2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/vue-3-meta/-/vue-3-meta-2.4.0.tgz#2dd505d8d34b063fac6e5ca5db00c99793944ffd"
+  integrity sha512-OK7foSVxm7kmqvTkLDCBGlujEMVxtNdlkl1n5iUtVYsHpX8+tQTGroNBcCMX8RmFlvD/bUlrTMVFykQRLSwEVQ==
+  dependencies:
+    deepmerge "^4.2.2"
+
 vue-avatar@^2.2.0:
   version "2.3.3"
   resolved "https://registry.yarnpkg.com/vue-avatar/-/vue-avatar-2.3.3.tgz#e125bf4f4a6f4f9480da0c522020266a8609d2a8"
   integrity sha512-Z57ILRTkFIAuCH9JiFBxX74C5zua5ub/jRDM/KZ+QKXNfscvmUOgWBs3kA2+wrpZMowIvfLHIT0gvQu1z+zpLg==
-
-vue-clipboard2@^0.3.1:
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/vue-clipboard2/-/vue-clipboard2-0.3.1.tgz#6e551fb7bd384889b28b0da3b12289ed6bca4894"
-  integrity sha512-H5S/agEDj0kXjUb5GP2c0hCzIXWRBygaWLN3NEFsaI9I3uWin778SFEMt8QRXiPG+7anyjqWiw2lqcxWUSfkYg==
-  dependencies:
-    clipboard "^2.0.0"
 
 vue-datetime@^1.0.0-beta.10:
   version "1.0.0-beta.14"
@@ -9894,7 +9901,7 @@ vue-loader@^16.1.2:
     hash-sum "^2.0.0"
     loader-utils "^2.0.0"
 
-vue-meta@^2.2.2, vue-meta@^2.3.2:
+vue-meta@^2.3.2:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/vue-meta/-/vue-meta-2.4.0.tgz#a419fb4b4135ce965dab32ec641d1989c2ee4845"
   integrity sha512-XEeZUmlVeODclAjCNpWDnjgw+t3WA6gdzs6ENoIAgwO1J1d5p1tezDhtteLUFwcaQaTtayRrsx7GL6oXp/m2Jw==

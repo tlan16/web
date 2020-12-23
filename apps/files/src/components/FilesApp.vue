@@ -99,7 +99,7 @@ export default {
     })
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     this.SET_SIDEBAR_FOOTER_CONTENT_COMPONENT(null)
   },
 

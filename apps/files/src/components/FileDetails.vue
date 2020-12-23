@@ -153,7 +153,7 @@ export default {
     }
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     this.SET_APP_SIDEBAR_EXPANDED_ACCORDION(null)
   },
 

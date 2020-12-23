@@ -19,6 +19,7 @@ const router = createRouter({
     },
     {
       path: '/oidc-callback',
+      name: 'oidc-callback',
       components: {
         fullscreen: OidcCallbackPage
       },

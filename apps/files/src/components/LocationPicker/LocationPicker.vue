@@ -262,7 +262,7 @@ export default {
     }
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     this.SET_NAVIGATION_HIDDEN(false)
     this.SET_MAIN_CONTENT_COMPONENT(null)
   },

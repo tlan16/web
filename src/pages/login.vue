@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 export default {
   name: 'LoginPage',
   data() {
@@ -59,7 +59,13 @@ export default {
   },
 
   methods: {
-    ...mapActions(['login'])
+    login() {
+      if (this.$auth.isAuthenticated) {
+        return this.$router.push('oidc-callback')
+      }
+
+      this.$auth.authenticate('oauth2', {}, {})
+    }
   }
 }
 </script>

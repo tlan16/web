@@ -76,9 +76,21 @@ export default {
   },
   methods: {
     ...mapActions(['logout']),
-    performLogout(event) {
+    async performLogout(event) {
       if (event.target.id === 'exitAnchor') {
-        this.logout()
+        const u = await this.$auth.getStoredUserObject()
+
+        if (u && u.id_token) {
+          this.$auth
+            .createSignoutRequest({ id_token_hint: u.id_token })
+            .then(signoutRequestUrl => {
+              // Navigate to signout URL
+              window.open(signoutRequestUrl, '_self')
+            })
+            .catch(error => {
+              console.error(error)
+            })
+        }
       }
     }
   }

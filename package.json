@@ -114,12 +114,10 @@
     "url-loader": "^4.1.1",
     "url-search-params-polyfill": "^8.0.0",
     "vue": "^3.0.4",
-    "vue-clipboard2": "^0.3.1",
     "vue-drag-drop": "^1.1.4",
     "vue-events": "^3.1.0",
     "vue-gettext": "^2.1.5",
     "vue-loader": "^16.1.2",
-    "vue-meta": "^2.2.2",
     "vue-router": "^4.0.1",
     "vue-scrollto": "^2.15.0",
     "vue2-touch-events": "^2.2.1",
@@ -162,6 +160,7 @@
   },
   "dependencies": {
     "@jshmrtn/vue3-gettext": "^1.0.0",
+    "@soerenmartius/vue3-clipboard": "^0.1.0",
     "crypto-browserify": "^3.12.0",
     "stream-browserify": "^3.0.0",
     "vue3-resize": "^0.2.0"

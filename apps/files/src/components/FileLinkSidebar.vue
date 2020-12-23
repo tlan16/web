@@ -183,7 +183,7 @@ export default {
     this.$_reloadLinks()
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     this.SET_APP_SIDEBAR_ACCORDION_CONTEXT(null)
   },
 
