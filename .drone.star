@@ -12,6 +12,7 @@ config = {
     "yarnlint": True,
     "acceptance": {
         "webUI": {
+            "debugSuites": ["webUIFilesList"],
             "suites": {
                 "webUIBasic": [
                     "webUIAccount",
@@ -109,6 +110,7 @@ config = {
             "screenShots": True,
         },
         "webUINotification": {
+            "skip": True,
             "suites": {
                 "webUINotificationBasic": [
                     "webUINotifications",
@@ -127,6 +129,7 @@ config = {
             "notificationsAppNeeded": True,
         },
         "webUIFederation": {
+            "skip": True,
             "suites": {
                 "webUISharingExternal": "SharingExternal",
                 "webUISharingExternalToRoot": "SharingExternalRoot",
@@ -140,6 +143,7 @@ config = {
             "federatedServerVersion": "daily-master-qa",
         },
         "webUI-XGA-Notifications": {
+            "skip": True,
             "suites": {
                 "XGAPortrait1-Notifications": [
                     "webUINotifications",
@@ -155,6 +159,7 @@ config = {
             "filterTags": "@smokeTest and not @skipOnXGAPortraitResolution and not @skip and not @skipOnOC10",
         },
         "webUI-XGA": {
+            "skip": True,
             "suites": {
                 "XGAPortrait1": [
                     "webUIAccount",
@@ -233,6 +238,7 @@ config = {
             "filterTags": "@smokeTest and not @skipOnXGAPortraitResolution and not @skip and not @skipOnOC10",
         },
         "webUI-Notifications-iPhone": {
+            "skip": True,
             "suites": {
                 "iPhone1-Notifications": [
                     "webUINotifications",
@@ -248,6 +254,7 @@ config = {
             "filterTags": "@smokeTest and not @skipOnIphoneResolution and not @skip and not @skipOnOC10",
         },
         "webUI-iPhone": {
+            "skip": True,
             "suites": {
                 "iPhone1": [
                     "webUIAccount",
@@ -326,6 +333,7 @@ config = {
             "filterTags": "@smokeTest and not @skipOnIphoneResolution and not @skip and not @skipOnOC10",
         },
         "webUI-ocis": {
+            # "debugSuites": {"webUIOCISFilesList": "webUIFilesList"},
             "suites": {
                 "webUIOCISBasic": [
                     "webUILogin",
@@ -854,7 +862,7 @@ def acceptance(ctx):
                         else:
                             steps += buildWeb()
 
-                        services = browserService(alternateSuiteName, browser)
+                        services = browserService(alternateSuiteName, browser) + middlewareService(params["runningOnOCIS"])
 
                         if (params["runningOnOCIS"]):
                             # Services and steps required for running tests with oCIS
@@ -1933,6 +1941,7 @@ def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironm
         environment["SCREENSHOTS"] = "true"
     environment["SERVER_HOST"] = "http://web"
     environment["BACKEND_HOST"] = "http://owncloud"
+    environment["MIDDLEWARE_HOST"] = "http://middleware:3000"
 
     for env in extraEnvironment:
         environment[env] = extraEnvironment[env]
@@ -2296,6 +2305,22 @@ def checkStarlark():
                 "refs/pull/**",
             ],
         },
+    }]
+
+def middlewareService(ocis = False):
+    return [{
+        "name": "middleware",
+        "image": "dpakach/owncloud-test-middleware",
+        "pull": "always",
+        "environment": {
+            "BACKEND_HOST": "https://ocis:9200" if ocis else "http://owncloud",
+            "OCIS_REVA_DATA_ROOT": "/srv/app/tmp/ocis/storage/owncloud/",
+            "RUN_ON_OCIS": "true" if ocis else "false",
+        },
+        "volumes": [{
+            "name": "gopath",
+            "path": "/srv/app",
+        }],
     }]
 
 def dependsOn(earlierStages, nextStages):
