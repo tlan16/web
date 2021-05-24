@@ -334,6 +334,7 @@ config = {
         },
         "webUI-ocis": {
             # "debugSuites": {"webUIOCISFilesList": "webUIFilesList"},
+            "skip": True,
             "suites": {
                 "webUIOCISBasic": [
                     "webUILogin",
@@ -1941,7 +1942,7 @@ def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironm
         environment["SCREENSHOTS"] = "true"
     environment["SERVER_HOST"] = "http://web"
     environment["BACKEND_HOST"] = "http://owncloud"
-    environment["MIDDLEWARE_HOST"] = "http://middleware:3000"
+    environment["MIDDLEWARE_HOST"] = "middleware:3000"
 
     for env in extraEnvironment:
         environment[env] = extraEnvironment[env]
@@ -2316,6 +2317,7 @@ def middlewareService(ocis = False):
             "BACKEND_HOST": "https://ocis:9200" if ocis else "http://owncloud",
             "OCIS_REVA_DATA_ROOT": "/srv/app/tmp/ocis/storage/owncloud/",
             "RUN_ON_OCIS": "true" if ocis else "false",
+            "HOST": "middleware",
         },
         "volumes": [{
             "name": "gopath",
