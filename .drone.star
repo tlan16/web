@@ -2318,8 +2318,12 @@ def middlewareService(ocis = False):
             "OCIS_REVA_DATA_ROOT": "/srv/app/tmp/ocis/storage/owncloud/",
             "RUN_ON_OCIS": "true" if ocis else "false",
             "HOST": "middleware",
+            "REMOTE_UPLOAD_DIR": "/filesForUpload",
         },
         "volumes": [{
+            "name": "uploads",
+            "path": "/filesForUpload",
+        },{
             "name": "gopath",
             "path": "/srv/app",
         }],
