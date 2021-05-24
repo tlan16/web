@@ -12,7 +12,6 @@ config = {
     "yarnlint": True,
     "acceptance": {
         "webUI": {
-            "debugSuites": ["webUIFilesList"],
             "suites": {
                 "webUIBasic": [
                     "webUIAccount",
@@ -110,7 +109,6 @@ config = {
             "screenShots": True,
         },
         "webUINotification": {
-            "skip": True,
             "suites": {
                 "webUINotificationBasic": [
                     "webUINotifications",
@@ -129,7 +127,6 @@ config = {
             "notificationsAppNeeded": True,
         },
         "webUIFederation": {
-            "skip": True,
             "suites": {
                 "webUISharingExternal": "SharingExternal",
                 "webUISharingExternalToRoot": "SharingExternalRoot",
@@ -143,7 +140,6 @@ config = {
             "federatedServerVersion": "daily-master-qa",
         },
         "webUI-XGA-Notifications": {
-            "skip": True,
             "suites": {
                 "XGAPortrait1-Notifications": [
                     "webUINotifications",
@@ -159,7 +155,6 @@ config = {
             "filterTags": "@smokeTest and not @skipOnXGAPortraitResolution and not @skip and not @skipOnOC10",
         },
         "webUI-XGA": {
-            "skip": True,
             "suites": {
                 "XGAPortrait1": [
                     "webUIAccount",
@@ -238,7 +233,6 @@ config = {
             "filterTags": "@smokeTest and not @skipOnXGAPortraitResolution and not @skip and not @skipOnOC10",
         },
         "webUI-Notifications-iPhone": {
-            "skip": True,
             "suites": {
                 "iPhone1-Notifications": [
                     "webUINotifications",
@@ -254,7 +248,6 @@ config = {
             "filterTags": "@smokeTest and not @skipOnIphoneResolution and not @skip and not @skipOnOC10",
         },
         "webUI-iPhone": {
-            "skip": True,
             "suites": {
                 "iPhone1": [
                     "webUIAccount",
@@ -333,8 +326,6 @@ config = {
             "filterTags": "@smokeTest and not @skipOnIphoneResolution and not @skip and not @skipOnOC10",
         },
         "webUI-ocis": {
-            # "debugSuites": {"webUIOCISFilesList": "webUIFilesList"},
-            "skip": True,
             "suites": {
                 "webUIOCISBasic": [
                     "webUILogin",
@@ -2323,7 +2314,7 @@ def middlewareService(ocis = False):
         "volumes": [{
             "name": "uploads",
             "path": "/filesForUpload",
-        },{
+        }, {
             "name": "gopath",
             "path": "/srv/app",
         }],
