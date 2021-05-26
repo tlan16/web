@@ -1933,7 +1933,7 @@ def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironm
         environment["SCREENSHOTS"] = "true"
     environment["SERVER_HOST"] = "http://web"
     environment["BACKEND_HOST"] = "http://owncloud"
-    environment["MIDDLEWARE_HOST"] = "middleware:3000"
+    environment["MIDDLEWARE_HOST"] = "http://middleware:3000"
 
     for env in extraEnvironment:
         environment[env] = extraEnvironment[env]

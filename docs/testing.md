@@ -62,8 +62,25 @@ In order to run the acceptance tests you need to run ocis using the ocis storage
 
 ## Run tests
 
+### Running the test middleware
+- Running the tests will require the [owncloud test middleware](https://github.com/owncloud/owncloud-test-middleware). Run it using the instructions from [the documentation](https://github.com/owncloud/owncloud-test-middleware#starting-the-server)
+
+  You can also use docker to start the owncloud test middleware. For that go to `tests/acceptance` and create a `test.env` file with correct values for different test configs. Now run the following command to start the middleware server and selenium server using docker.
+  ```bash
+  # If you are running tests on oc 10
+  docker-compose up -d
+
+  # If  you are running tests on ocis backend
+  docker-compose -f ./docker-compose-ocis.yml up -d
+  ```
+  Or you can run the test middleware directy using docker you can use the following command. Make sure to set the env variables accordingly.
+  ```
+  docker run --name=oc-test-middleware --network=host -e BACKEND_HOST=https://localhost:9200 -e RUN_ON_OCIS=true -e NODE_TLS_REJECT_UNAUTHORIZED=0 -v /var/tmp/ocis:/var/tmp/ocis -v ./tests/acceptance/filesForUpload:/usr/src/app/filesForUpload dpakach/owncloud-test-middleware:latest
+  ```
+### Running the tests
 - set `SERVER_HOST` to point at the URL where the Web web pages are served, for example "http://localhost:9100"
 - set `BACKEND_HOST` to point to the URL of the backend, for example "http://localhost/owncloud/"
+- set `MIDDLEWARE_HOST` to point to the URL of the oC test middleware, for example "http://localhost:3000"
 - to be able to run federation tests, additional setup is needed:
    1. Install and set up a second ownCloud server-instance that is accessible by a different URL. That second server-instance must have its own database and data directory.
    2. clone and install the testing app into the second ownCloud server-instance from http://github.com/owncloud/testing .
@@ -134,6 +151,7 @@ These values can be set using the environment variables to configure `yarn test:
 | `WEB_UI_CONFIG`       | Path for the web config file (usually in the dist folder)                       | - |
 | `VISUAL_TEST`       | Run the visual regression comparison while running the acceptance tests                       | - |
 | `UPDATE_VRT_SCREENSHOTS`       | Update the baseline snapshots with the latest images for visual regression tests                       | - |
+| `MIDDLEWARE_HOST`       | URL of the oc test middleware     | http://localhost:3000 |
 
 ## Tips
 
