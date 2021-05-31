@@ -65,7 +65,19 @@ In order to run the acceptance tests you need to run ocis using the ocis storage
 ### Running the test middleware
 - Running the tests will require the [owncloud test middleware](https://github.com/owncloud/owncloud-test-middleware). Run it using the instructions from [the documentation](https://github.com/owncloud/owncloud-test-middleware#starting-the-server)
 
-  You can also use docker to start the owncloud test middleware. For that go to `tests/acceptance` and create a `test.env` file with correct values for different test configs. Now run the following command to start the middleware server and selenium server using docker.
+  You can also use docker-compose to start the owncloud test middleware along with the selenium server. For that go to `tests/acceptance` and copy file `test.env.sample` to `test.oc10.env` and `test.ocis.env` with correct values for different test configs.
+  If you are using mac system to run the tests, you need to make some more adjustments in your system.
+  - For running the tests with oc10
+    - Make sure the docker host ip (172.17.0.1 or `host.internal.docker`) is set as trusted domain in `config.php`
+    - Make sure the oauth2 client is setup with correct redirect url using the docker host ip.
+    - Make sure that values in `config/config.json` use the docker host ip and not `localhost`
+    - Use the docker host ip for `BACKEND_HOST` in `test.*.env` along with correct port to where your owncloud server is running.
+  - For running the tests with ocis
+    - setup ocis correctly as described [here](#ocis)
+    - Make sure that values in `config/config.json` use the docker host ip and not `localhost`
+    - Use the docker host ip for `BACKEND_HOST` in `test.*.env`
+
+  Now run the following command to start the middleware server and selenium server using docker.
   ```bash
   # If you are running tests on oc 10
   docker-compose up -d

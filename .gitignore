@@ -44,4 +44,4 @@ tests/testing-app
 !/packages/web-runtime/themes/owncloud/**
 
 # test env file
-/tests/acceptance/test.env
+/tests/acceptance/test.*.env
