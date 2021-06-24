@@ -34,7 +34,7 @@ import lifecycleMixin from './mixins/lifecycleMixin'
 import ClickOutsideDirective from './directives/clickOutside'
 
 // --- Gettext ----
-import GetTextPlugin from 'vue-gettext'
+import { createGettext } from "@jshmrtn/vue3-gettext";
 import coreTranslations from '../l10n/translations.json'
 import odsTranslations from 'owncloud-design-system/dist/system/translations.json'
 
@@ -237,12 +237,13 @@ const missingOrInvalidConfig = async () => {
 }
 
 const loadTranslations = () => {
-  Vue.use(GetTextPlugin, {
+  const gettext = createGettext({
     availableLanguages: supportedLanguages,
     defaultLanguage: navigator.language.substring(0, 2),
     translations,
     silent: true
   })
+  Vue.use(gettext)
 }
 
 export const exec = async () => {

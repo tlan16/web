@@ -20,6 +20,7 @@ import livereload from 'rollup-plugin-livereload'
 import html from '@rollup/plugin-html'
 import globals from 'rollup-plugin-node-globals'
 import ts from 'rollup-plugin-ts'
+import alias from '@rollup/plugin-alias';
 
 const production = !process.env.ROLLUP_WATCH
 
@@ -29,13 +30,24 @@ const plugins = [
     targets: path.join('dist', '*'),
     dot: true
   }),
+  alias({
+    resolve: ['.js', '.ts', '.vue'],
+    entries: [
+      { find: 'vue', replacement: '@vue/compat' },
+    ]
+  }),
+  vue({
+    compilerOptions: {
+      compatConfig: {
+        MODE: 2
+      }
+    },
+    css: false
+  }),
   postcss({
     extract: path.join('css', 'web.css'),
     minimize: production,
     config: false
-  }),
-  vue({
-    css: false
   }),
   builtins({ crypto: true }),
   resolve({
@@ -160,11 +172,6 @@ if (process.env.SERVER === 'true') {
     serve({
       contentBase: ['dist'],
       port: process.env.PORT || 9100
-    })
-  )
-  plugins.push(
-    livereload({
-      watch: 'dist'
     })
   )
 }
