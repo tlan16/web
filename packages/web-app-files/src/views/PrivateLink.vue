@@ -24,7 +24,9 @@
 </template>
 
 <script>
+import path from 'path'
 import { mapGetters } from 'vuex'
+import { buildResource } from '../helpers/resources'
 
 export default {
   data() {
@@ -34,7 +36,8 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['configuration']),
+    ...mapGetters(['configuration', 'homeFolder']),
+    ...mapGetters('Files', ['davProperties']),
 
     pageTitle() {
       return this.$gettext(this.$route.meta.title)
@@ -48,31 +51,37 @@ export default {
       return this.configuration.theme.logo.login
     }
   },
-  mounted() {
-    // query oc10 server to translate fileId to real path
+  async mounted() {
+    // query server to translate fileId to real path
     this.loading = true
-    this.$client.files
-      .getPathForFileId(this.$route.params.fileId)
-      .then(path => {
-        const lastSlash = path.lastIndexOf('/')
-        const folder = path.substring(0, lastSlash).replace(/^(\/)/, '')
-        const file = path.substring(lastSlash + 1)
-        this.$router.push({
-          name: 'files-personal',
-          params: {
-            item: folder || '/'
-          },
-          query: {
-            scrollTo: file
-          }
-        })
-      })
-      .catch(error => {
-        this.errorMessage = error
-      })
-      .finally(() => {
-        this.loading = false
-      })
+    try {
+      const resourcePath = await this.$client.files.getPathForFileId(this.$route.params.fileId)
+      let resource = await this.$client.files.fileInfo(resourcePath, this.davProperties)
+      resource = buildResource(resource)
+      const route = {
+        name: 'files-personal'
+      }
+
+      if (resource.type === 'folder') {
+        // if folder: route directly into it
+        route.params = {
+          item: resource.path || this.homeFolder
+        }
+      } else {
+        // if file: route into parent and highlight file
+        route.params = {
+          item: path.dirname(resource.path)
+        }
+        route.query = {
+          scrollTo: resource.name
+        }
+      }
+
+      await this.$router.push(route)
+    } catch (error) {
+      this.errorMessage = error
+      this.loading = false
+    }
   }
 }
 </script>
