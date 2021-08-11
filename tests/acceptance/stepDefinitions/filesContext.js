@@ -515,6 +515,10 @@ When('the user restores the file to last version using the webUI', function() {
   return client.page.FilesPageElement.versionsDialog().restoreToPreviousVersion()
 })
 
+When('the user downloads a file of a previous version using the webUI', function() {
+  return client.page.FilesPageElement.versionsDialog().downloadFilePreviousVersion()
+})
+
 When('the user/public reloads the current page of the webUI', function() {
   return client.refresh()
 })
@@ -1151,6 +1155,11 @@ Then('the page should be empty', async function() {
 
 When('the user downloads file/folder {string} using the webUI', function(file) {
   return client.page.FilesPageElement.filesList().downloadFile(file)
+})
+
+Then('file {string} should be downloaded successfully', function(file) {
+  client.pause(5000) // We should waiting for the file to download
+  return client.checkFileExists(path.join(__dirname, '/../download/', file))
 })
 
 Then('the following resources should have share indicators on the webUI', async function(
