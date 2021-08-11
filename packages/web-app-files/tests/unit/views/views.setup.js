@@ -40,7 +40,10 @@ export const getStore = function({
   inProgress = [null],
   totalFilesCount = null,
   selectedFiles = [],
-  totalFilesSize = null
+  totalFilesSize = null,
+  davProperties = [],
+  publicLinkPassword = null,
+  slogan = null
 } = {}) {
   return createStore(Vuex.Store, {
     state: {
@@ -50,6 +53,11 @@ export const getStore = function({
       configuration: () => ({
         options: {
           disablePreviews: disablePreviews
+        },
+        theme: {
+          general: {
+            slogan: slogan
+          }
         }
       }),
       getToken: () => '',
@@ -72,7 +80,9 @@ export const getStore = function({
           inProgress: () => inProgress,
           highlightedFile: () => highlightedFile,
           pages: () => pages,
-          currentFolder: () => currentFolder
+          currentFolder: () => currentFolder,
+          davProperties: () => davProperties,
+          publicLinkPassword: () => publicLinkPassword
         },
         mutations: {
           UPDATE_RESOURCE: (state, resource) => {

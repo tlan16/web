@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FilesDrop should show page title and configuration theme general slogan 1`] = `<h1 data-testid="files-drop-page-title" class="oc-invisible-sr">page route title</h1>`;
+
+exports[`FilesDrop should show page title and configuration theme general slogan 2`] = `<p data-testid="files-drop-slogan">some slogan</p>`;
+
+exports[`FilesDrop should show spinner with loading text if wrapper is loading 1`] = `
+<h2 class="oc-login-card-title">
+  <translate-stub tag="span">Loading public link…</translate-stub>
+</h2>
+`;
+
+exports[`FilesDrop when "loading" is set to false should not show files table if uploaded files list is empty 1`] = `
+<div class="uk-flex uk-flex-center uk-overflow-auto uk-width-1-1 files-empty">
+  <!---->
+</div>
+`;
+
+exports[`FilesDrop when "loading" is set to false should show error message if only it has truthy value 1`] = `
+<div data-testid="files-drop-error-message" class="uk-text-center">
+  <h2>
+    <translate-stub tag="span">An error occurred while loading the public link</translate-stub>
+  </h2>
+  <p class="oc-m-rm">This is a test error message</p>
+</div>
+`;
+
+exports[`FilesDrop when "loading" is set to false should show share information title 1`] = `<h2 data-testid="files-drop-share-owner-header">admin shared this folder with you for uploading</h2>`;

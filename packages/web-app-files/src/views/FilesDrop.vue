@@ -1,6 +1,6 @@
 <template>
   <div id="files-drop-container" class="uk-height-1-1 uk-flex uk-flex-column uk-flex-between">
-    <h1 class="oc-invisible-sr">{{ pageTitle }}</h1>
+    <h1 class="oc-invisible-sr" data-testid="files-drop-page-title">{{ pageTitle }}</h1>
     <div class="oc-p uk-height-1-1">
       <div v-if="loading" key="loading-drop" class="uk-flex uk-flex-column uk-flex-middle">
         <h2 class="oc-login-card-title">
@@ -10,7 +10,7 @@
       </div>
       <div v-else key="loaded-drop" class="uk-flex uk-flex-column uk-flex-middle uk-height-1-1">
         <div class="uk-text-center uk-width-1-1 uk-width-xxlarge@m">
-          <h2 v-text="title" />
+          <h2 data-testid="files-drop-share-owner-header" v-text="title" />
           <vue-dropzone
             id="oc-dropzone"
             :options="dropzoneOptions"
@@ -59,7 +59,7 @@
             </oc-tbody>
           </oc-table-simple>
         </div>
-        <div v-if="errorMessage" class="uk-text-center">
+        <div v-if="errorMessage" class="uk-text-center" data-testid="files-drop-error-message">
           <h2>
             <translate>An error occurred while loading the public link</translate>
           </h2>
@@ -68,7 +68,7 @@
       </div>
     </div>
     <div class="uk-text-center">
-      <p v-text="configuration.theme.general.slogan" />
+      <p data-testid="files-drop-slogan" v-text="configuration.theme.general.slogan" />
     </div>
   </div>
 </template>
