@@ -2,7 +2,7 @@
   <div id="oc-file-details-sidebar">
     <div v-if="hasContent">
       <div
-        v-if="highlightedFile.thumbnail"
+        v-if="file.thumbnail"
         :style="{
           'background-image': $asyncComputed.preview.updating ? 'none' : `url(${preview})`
         }"
@@ -63,7 +63,7 @@
         </tr>
         <tr v-if="showSize" data-testid="sizeInfo">
           <th scope="col" class="oc-pr-s" v-text="sizeTitle" />
-          <td v-text="getResourceSize(highlightedFile.size)" />
+          <td v-text="getResourceSize(file.size)" />
         </tr>
         <tr v-if="showVersions" data-testid="versionsInfo">
           <th scope="col" class="oc-pr-s" v-text="versionsTitle" />
@@ -99,12 +99,19 @@ export default {
   title: $gettext => {
     return $gettext('Details')
   },
+
+  inject: ['displayedItem'],
+
   data: () => ({
     loading: false
   }),
   computed: {
-    ...mapGetters('Files', ['highlightedFile', 'versions']),
+    ...mapGetters('Files', ['versions']),
     ...mapGetters(['user', 'getToken', 'configuration']),
+
+    file() {
+      return this.displayedItem.value
+    },
 
     hasContent() {
       return (
@@ -121,7 +128,7 @@ export default {
       return this.hasAnyShares && !this.isPublicPage
     },
     detailSharingInformation() {
-      const isFolder = this.highlightedFile.type === 'folder'
+      const isFolder = this.file.type === 'folder'
       if (isFolder) {
         return this.$gettext('This folder has been shared.')
       }
@@ -134,10 +141,10 @@ export default {
       return this.$gettext('Show links')
     },
     hasTimestamp() {
-      return this.highlightedFile.mdate?.length > 0 || this.highlightedFile.sdate?.length > 0
+      return this.file.mdate?.length > 0 || this.file.sdate?.length > 0
     },
     timestampTitle() {
-      if (this.highlightedFile.mdate) {
+      if (this.file.mdate) {
         return this.$gettext('Last modified:')
       }
       return this.$gettext('Shared:')
@@ -147,22 +154,22 @@ export default {
     },
     ownerName() {
       return (
-        this.highlightedFile.ownerDisplayName ||
-        this.highlightedFile.shareOwnerDisplayname ||
-        this.highlightedFile.owner?.[0].displayName
+        this.file.ownerDisplayName ||
+        this.file.shareOwnerDisplayname ||
+        this.file.owner?.[0].displayName
       )
     },
     ownerAdditionalInfo() {
-      return this.highlightedFile.owner?.[0].additionalInfo
+      return this.file.owner?.[0].additionalInfo
     },
     showSize() {
-      return this.getResourceSize(this.highlightedFile.size) !== '?'
+      return this.getResourceSize(this.file.size) !== '?'
     },
     sizeTitle() {
       return this.$gettext('Size:')
     },
     showVersions() {
-      if (this.highlightedFile.type === 'folder') {
+      if (this.file.type === 'folder') {
         return
       }
       return this.versions.length > 0 && !this.isPublicPage
@@ -175,40 +182,38 @@ export default {
     },
     capitalizedTimestamp() {
       let displayDate = ''
-      if (this.highlightedFile.mdate) {
-        displayDate = this.formDateFromNow(this.highlightedFile.mdate, 'Http')
+      if (this.file.mdate) {
+        displayDate = this.formDateFromNow(this.file.mdate, 'Http')
       } else {
-        displayDate = this.formDateFromNow(this.highlightedFile.sdate, 'Http')
+        displayDate = this.formDateFromNow(this.file.sdate, 'Http')
       }
       return upperFirst(displayDate)
     },
     hasAnyShares() {
-      return (
-        this.highlightedFile.shareTypes?.length > 0 || this.highlightedFile.indicators?.length > 0
-      )
+      return this.file.shareTypes?.length > 0 || this.file.indicators?.length > 0
     },
     hasPeopleShares() {
       return (
-        intersection(this.highlightedFile.shareTypes, userShareTypes).length > 0 ||
-        this.highlightedFile.indicators?.filter(e => e.icon === 'group').length > 0
+        intersection(this.file.shareTypes, userShareTypes).length > 0 ||
+        this.file.indicators?.filter(e => e.icon === 'group').length > 0
       )
     },
     hasLinkShares() {
       return (
-        this.highlightedFile.shareTypes.includes(shareTypes.link) ||
-        this.highlightedFile.indicators?.filter(e => e.icon === 'link').length > 0
+        this.file.shareTypes.includes(shareTypes.link) ||
+        this.file.indicators?.filter(e => e.icon === 'link').length > 0
       )
     },
     ownedByCurrentUser() {
       return (
-        this.highlightedFile.ownerId === this.user.id ||
-        this.highlightedFile.owner?.[0].username === this.user.id ||
-        this.highlightedFile.shareOwner === this.user.id
+        this.file.ownerId === this.user.id ||
+        this.file.owner?.[0].username === this.user.id ||
+        this.file.shareOwner === this.user.id
       )
     }
   },
   watch: {
-    highlightedFile() {
+    file() {
       this.loadData()
     }
   },
@@ -221,7 +226,7 @@ export default {
         // TODO: this timeout resolves flickering of the preview because it's rendered multiple times. Needs a better solution.
         await new Promise(resolve => setTimeout(resolve, 500))
         return loadPreview({
-          resource: this.highlightedFile,
+          resource: this.file,
           isPublic: this.isPublicPage,
           dimensions: ImageDimension.Preview,
           server: this.configuration.server,
@@ -230,7 +235,7 @@ export default {
         })
       },
       lazy: true,
-      watch: ['highlightedFile.id']
+      watch: ['file.id']
     }
   },
   methods: {
@@ -248,8 +253,8 @@ export default {
     async loadData() {
       this.loading = true
       const calls = []
-      if (this.highlightedFile.type === 'file' && !this.isPublicPage) {
-        calls.push(this.loadVersions({ client: this.$client, fileId: this.highlightedFile.id }))
+      if (this.file.type === 'file' && !this.isPublicPage) {
+        calls.push(this.loadVersions({ client: this.$client, fileId: this.file.id }))
       }
       await Promise.all(calls.map(p => p.catch(e => e)))
       this.loading = false

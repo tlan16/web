@@ -1,29 +1,25 @@
 <template>
   <div class="file_info">
-    <oc-icon :name="highlightedFile.icon" size="large" class="file_info__icon" />
+    <oc-icon :name="file.icon" size="large" class="file_info__icon" />
     <div class="file_info__body">
-      <h2 tabindex="-1">
-        {{ highlightedFile.name }}
-      </h2>
+      <h2 tabindex="-1" v-text="file.name" />
       <div>
-        <template v-if="highlightedFile.size > -1">
-          {{ getResourceSize(highlightedFile.size) }},
-        </template>
+        <template v-if="file.size > -1">{{ getResourceSize(file.size) }},</template>
         {{ modificationTime }}
       </div>
     </div>
     <oc-button
       v-if="!publicPage() && isFavoritesEnabled"
       :aria-label="
-        highlightedFile.starred
+        file.starred
           ? $gettext('Click to remove this file from your favorites')
           : $gettext('Click to mark this file as favorite')
       "
       appearance="raw"
       class="file_info__favorite"
-      @click.native.stop="toggleFileFavorite(highlightedFile)"
+      @click.native.stop="toggleFileFavorite(file)"
     >
-      <oc-icon :class="highlightedFile.starred ? 'oc-star-shining' : 'oc-star-dimm'" name="star" />
+      <oc-icon :class="file.starred ? 'oc-star-shining' : 'oc-star-dimm'" name="star" />
     </oc-button>
   </div>
 </template>
@@ -37,6 +33,7 @@ import MixinRoutes from '../../mixins/routes'
 export default {
   name: 'FileInfo',
   mixins: [Mixins, MixinResources, MixinRoutes],
+  inject: ['displayedItem'],
   props: {
     isContentDisplayed: {
       type: Boolean,
@@ -44,14 +41,13 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('Files', ['highlightedFile']),
     ...mapGetters(['capabilities']),
     modificationTime() {
       if (this.isTrashbinRoute) {
-        return this.formDateFromNow(this.highlightedFile.ddate, 'RFC')
+        return this.formDateFromNow(this.file.ddate, 'RFC')
       }
 
-      return this.formDateFromNow(this.highlightedFile.mdate, 'Http')
+      return this.formDateFromNow(this.file.mdate, 'Http')
     },
     isFavoritesEnabled() {
       return (
@@ -61,6 +57,10 @@ export default {
         !this.isAnySharedWithRoute &&
         !this.isTrashbinRoute
       )
+    },
+
+    file() {
+      return this.displayedItem.value
     }
   },
   methods: {
