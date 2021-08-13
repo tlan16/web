@@ -204,6 +204,11 @@ function createWrapper(testResource, testVersions = [], testPreview, publicRoute
           auth: !publicRoute
         }
       }
+    },
+    provide: {
+      displayedItem: {
+        value: testResource
+      }
     }
   })
 }
