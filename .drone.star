@@ -2142,7 +2142,7 @@ def addDownloadToVolume():
         "image": "selenium/standalone-firefox-debug:3.141.59",
         "volumes": [{
             "name": "download",
-            "path": "tests/acceptance/download",
+            "path": "/tests/acceptance/download",
         }],
     }]
 
