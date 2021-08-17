@@ -2139,7 +2139,7 @@ def addDownloadToVolume():
     return [{
         "name": "add-folder-download",
         "pull": "always",
-        "image": "selenium/standalone-firefox-debug:3.141.59",
+        "image": "selenium/standalone-chrome-debug:3.141.59",
         "volumes": [{
             "name": "download",
             "path": "/tests/acceptance/download",
