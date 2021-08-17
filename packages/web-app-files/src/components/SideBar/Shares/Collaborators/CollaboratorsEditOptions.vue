@@ -27,6 +27,7 @@
           <li v-for="role in roles" :key="role.name">
             <oc-button
               :id="`files-recipient-role-drop-btn-${role.name}`"
+              ref="roleSelect"
               appearance="raw"
               justify-content="space-between"
               class="files-recipient-role-drop-btn oc-py-xs oc-px-s"
@@ -51,8 +52,8 @@
     >
       <template #special>
         <translate tag="h4" class="files-recipient-custom-permissions-drop-title"
-          >User can</translate
-        >
+          >User can
+        </translate>
         <oc-list class="oc-mb">
           <li
             v-for="permission in advancedRole.additionalPermissions"
@@ -113,7 +114,7 @@
 import { mapGetters } from 'vuex'
 import { DateTime } from 'luxon'
 import collaboratorsMixins from '../../../../mixins/collaborators'
-
+import get from 'lodash-es/get'
 import RoleItem from '../../Shared/RoleItem.vue'
 
 export default {
@@ -296,6 +297,11 @@ export default {
     }
 
     this.getRecipientsCustomPermissions()
+    window.addEventListener('keydown', this.cycleRoles)
+  },
+
+  beforeDestroy() {
+    window.removeEventListener('keydown', this.cycleRoles)
   },
 
   mounted() {
@@ -336,7 +342,7 @@ export default {
 
     selectRole(role) {
       if (role.name === 'advancedRole') {
-        this.$refs.customPermissionsDrop.$_ocDrop_show()
+        this.$refs.customPermissionsDrop.show()
 
         return
       }
@@ -347,14 +353,14 @@ export default {
     },
 
     confirmCustomPermissions() {
-      this.$refs.customPermissionsDrop.$_ocDrop_hide()
+      this.$refs.customPermissionsDrop.hide()
 
       this.selectedRole = this.advancedRole
     },
 
     cancelCustomPermissions() {
-      this.$refs.customPermissionsDrop.$_ocDrop_hide()
-      this.$refs.rolesDrop.$_ocDrop_show()
+      this.$refs.customPermissionsDrop.hide()
+      this.$refs.rolesDrop.show()
     },
 
     getRecipientsCustomPermissions() {
@@ -365,6 +371,62 @@ export default {
           this.customPermissions.push(permission)
         }
       }
+    },
+
+    cycleRoles(event) {
+      // events only need to be captured if the roleSelect element is visible
+      if (!get(this, '$refs.rolesDrop.tippy.state.isShown', false)) {
+        return
+      }
+
+      const { keyCode } = event
+      const isKeyUpEvent = keyCode === 38
+      const isKeyDownEvent = keyCode === 40
+
+      // to cycle through the list of roles only up and down keyboard events are allowed
+      // if this is not the case we can return early and stop the script execution from here
+      if (!isKeyUpEvent && !isKeyDownEvent) {
+        return
+      }
+
+      // if there is only 1 or no roleSelect we can early return
+      // it does not make sense to cycle through it if value is less than 1
+      if (get(this, '$refs.roleSelect', []).length <= 1) {
+        return
+      }
+
+      // obtain active role select in following priority chain:
+      // first try to get the focused select
+      // then try to get the selected select
+      // and if none of those applies we fall back to the first role select
+      const activeRoleSelect =
+        this.$refs.roleSelect.find(rs => rs.$el === document.activeElement) ||
+        this.$refs.roleSelect.find(rs => rs.$el.classList.contains('selected')) ||
+        this.$refs.roleSelect[0]
+
+      const activeRoleSelectIndex = this.$refs.roleSelect.indexOf(activeRoleSelect)
+      const activateRoleSelect = idx => this.$refs.roleSelect[idx].$el.focus()
+
+      // if the event key is arrow up
+      // and the next active role select index would be less than 0
+      // then activate the last available role select
+      if (isKeyUpEvent && activeRoleSelectIndex - 1 < 0) {
+        activateRoleSelect(this.$refs.roleSelect.length - 1)
+        return
+      }
+
+      // if the event key is arrow down
+      // and the next active role select index would be greater or even to the available amount of role selects
+      // then activate the first available role select
+      if (isKeyDownEvent && activeRoleSelectIndex + 1 >= this.$refs.roleSelect.length) {
+        activateRoleSelect(0)
+        return
+      }
+
+      // the only missing part is to navigate up or down, this only happens if:
+      // the next active role index is greater than 0
+      // the next active role index is less than the amount of all available role selects
+      activateRoleSelect(activeRoleSelectIndex + (isKeyUpEvent ? -1 : 1))
     }
   }
 }
