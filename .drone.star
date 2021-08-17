@@ -1378,7 +1378,7 @@ def browserService(alternateSuiteName, browser):
                 "path": "/uploads",
             }, {
                 "name": "download",
-                "path": "/home/seluser/Downloads"
+                "path": "/home/seluser/Downloads",
             }],
         }]
 
@@ -1392,7 +1392,7 @@ def browserService(alternateSuiteName, browser):
                 "path": "/uploads",
             }, {
                 "name": "download",
-                "path": "/home/seluser/Downloads"
+                "path": "/home/seluser/Downloads",
             }],
         }]
 
