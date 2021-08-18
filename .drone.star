@@ -2142,7 +2142,8 @@ def addDownloadToVolume():
         "image": "selenium/standalone-chrome-debug:3.141.59",
         "volumes": [{
             "name": "download",
-            "path": "/tests/acceptance/download",
+            "host":
+                "path": "/tests/acceptance/download",
         }],
     }]
 
