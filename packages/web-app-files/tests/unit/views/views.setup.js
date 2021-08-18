@@ -40,7 +40,9 @@ export const getStore = function({
   inProgress = [null],
   totalFilesCount = null,
   selectedFiles = [],
-  totalFilesSize = null
+  totalFilesSize = null,
+  publicLinkPassword = null,
+  isOcis = true
 } = {}) {
   return createStore(Vuex.Store, {
     state: {
@@ -53,13 +55,17 @@ export const getStore = function({
         }
       }),
       getToken: () => '',
-      isOcis: () => true,
+      isOcis: () => isOcis,
       homeFolder: () => '/'
+    },
+    actions: {
+      showMessage: jest.fn()
     },
     modules: {
       Files: {
         state: {
           resource: null,
+          currentFolder: currentFolder,
           currentPage: currentPage,
           filesPageLimit: 100
         },
@@ -72,15 +78,22 @@ export const getStore = function({
           inProgress: () => inProgress,
           highlightedFile: () => highlightedFile,
           pages: () => pages,
-          currentFolder: () => currentFolder
+          currentFolder: () => currentFolder,
+          publicLinkPassword: () => publicLinkPassword
         },
         mutations: {
           UPDATE_RESOURCE: (state, resource) => {
             state.resource = resource
           },
-          UPDATE_CURRENT_PAGE: () => {},
-          SET_FILES_PAGE_LIMIT: () => {},
-          CLEAR_FILES_SEARCHED: () => {}
+          UPDATE_CURRENT_PAGE: jest.fn(),
+          SET_FILES_PAGE_LIMIT: jest.fn(),
+          CLEAR_FILES_SEARCHED: jest.fn(),
+          SELECT_RESOURCES: jest.fn(),
+          CLEAR_CURRENT_FILES_LIST: jest.fn()
+        },
+        actions: {
+          loadFiles: jest.fn(),
+          loadIndicators: jest.fn()
         },
         namespaced: true,
         modules: {
