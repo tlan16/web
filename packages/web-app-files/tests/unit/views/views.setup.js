@@ -1,9 +1,33 @@
-import { createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 import OwnCloud from 'owncloud-sdk'
 import { createStore } from 'vuex-extensions'
+import { createLocalVue } from '@vue/test-utils'
 import DesignSystem from 'owncloud-design-system'
 import GetTextPlugin from 'vue-gettext'
+import { shareStatus } from '../../../src/helpers/shareStatus.js'
+
+export const stubs = {
+  'router-link': true,
+  translate: true,
+  'oc-pagination': true,
+  'oc-table-files': true,
+  'oc-spinner': true,
+  'context-actions': true
+}
+
+export const createShare = ({
+  id = '1234',
+  itemType = 'file',
+  status = shareStatus.accepted
+} = {}) => ({
+  file_target: '/' + id,
+  id: id,
+  item_type: itemType,
+  status: status,
+  share: {
+    id: id
+  }
+})
 
 export const createFile = ({ id, status = 1, type = 'folder' }) => ({
   id: `file-id-${id}`,
@@ -21,6 +45,14 @@ export const createFile = ({ id, status = 1, type = 'folder' }) => ({
 export const localVue = createLocalVue()
 localVue.prototype.$client = new OwnCloud()
 localVue.prototype.$client.init({ baseUrl: 'http://none.de' })
+localVue.prototype.$client.requests = {
+  ocs: async () => ({
+    status: 200,
+    headers: {
+      get: jest.fn()
+    }
+  })
+}
 localVue.use(Vuex)
 localVue.use(DesignSystem)
 localVue.use(GetTextPlugin, {
@@ -37,11 +69,11 @@ export const getStore = function({
   sidebarClosed = false,
   currentFolder = null,
   activeFilesCount = null,
-  inProgress = [null],
   totalFilesCount = null,
   selectedFiles = [],
   totalFilesSize = null,
   publicLinkPassword = null,
+  inProgress = [],
   isOcis = true
 } = {}) {
   return createStore(Vuex.Store, {
@@ -89,7 +121,9 @@ export const getStore = function({
           SET_FILES_PAGE_LIMIT: jest.fn(),
           CLEAR_FILES_SEARCHED: jest.fn(),
           SELECT_RESOURCES: jest.fn(),
-          CLEAR_CURRENT_FILES_LIST: jest.fn()
+          CLEAR_CURRENT_FILES_LIST: jest.fn(),
+          LOAD_FILES: jest.fn(),
+          SET_FILE_SELECTION: jest.fn()
         },
         actions: {
           loadFiles: jest.fn(),

@@ -37,6 +37,7 @@
               v-if="[shareStatus.pending, shareStatus.declined].includes(resource.status)"
               size="small"
               class="file-row-share-status-action"
+              data-testid="file-row-share-accept-button"
               @click.stop="$_acceptShare_trigger(resource)"
             >
               <oc-icon size="small" name="check" />
@@ -46,6 +47,7 @@
               v-if="[shareStatus.pending, shareStatus.accepted].includes(resource.status)"
               size="small"
               class="file-row-share-status-action oc-ml-s"
+              data-testid="file-row-share-decline-button"
               @click.stop="$_declineShare_trigger(resource)"
             >
               <oc-icon size="small" name="not_interested" />
