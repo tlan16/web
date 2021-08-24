@@ -144,7 +144,6 @@ module.exports = {
      * @param {string} permissions
      * @param {boolean} remote
      * @param {string} days
-     * @param {boolean} quickAction Asserts whether the quick actions should be used to open new collaborators panel
      *
      * @return void
      */
