@@ -12,7 +12,9 @@ export const stubs = {
   'oc-pagination': true,
   'oc-table-files': true,
   'oc-spinner': true,
-  'context-actions': true
+  'context-actions': true,
+  'list-loader': true,
+  'no-content-message': true
 }
 
 export const createShare = ({
@@ -123,7 +125,8 @@ export const getStore = function({
           SELECT_RESOURCES: jest.fn(),
           CLEAR_CURRENT_FILES_LIST: jest.fn(),
           LOAD_FILES: jest.fn(),
-          SET_FILE_SELECTION: jest.fn()
+          SET_FILE_SELECTION: jest.fn(),
+          SET_APP_SIDEBAR_ACTIVE_PANEL: jest.fn()
         },
         actions: {
           loadFiles: jest.fn(),
@@ -134,6 +137,9 @@ export const getStore = function({
           sidebar: {
             state: {
               closed: sidebarClosed
+            },
+            actions: {
+              open: jest.fn()
             },
             namespaced: true
           }
