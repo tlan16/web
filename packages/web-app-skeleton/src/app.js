@@ -9,7 +9,7 @@ const appInfo = {
 }
 
 const injectExtensions = async api => {
-  // the promise is just there to deomo lazy loading of extensions
+  // the promise is just there to showcase lazy loading of extensions
   await new Promise(resolve => setTimeout(resolve, 2000))
   console.log('#############################################################################')
   console.log('# FROM THE APP (SKELETON)')
