@@ -1145,7 +1145,7 @@ def acceptance(ctx):
                         if (params["earlyFail"]):
                             steps += calculateDiffContainsUnitTestsOnly(ctx)
 
-                        steps += installNPM()
+                        steps += installNPM() + installNPMTests()
 
                         if (params["oc10IntegrationAppIncluded"]):
                             steps += buildWebApp()
@@ -1590,6 +1590,16 @@ def installNPM():
         "pull": "always",
         "commands": [
             "if test -f runUnitTestsOnly; then echo 'skipping installNPM'; else yarn install --frozen-lockfile; fi",
+        ],
+    }]
+
+def installNPMTests():
+    return [{
+        "name": "npm-install-tests",
+        "image": "owncloudci/nodejs:14",
+        "pull": "always",
+        "commands": [
+            "if test -f runUnitTestsOnly; then echo 'skipping installNPM'; else cd tests/acceptance && yarn install --frozen-lockfile; fi",
         ],
     }]
 

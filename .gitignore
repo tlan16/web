@@ -23,7 +23,6 @@ dist
 .DS_Store
 .envrc
 
-tests/reports
 tests/ocis
 tests/testing-app
 
@@ -50,3 +49,5 @@ comments.file
 # Report for tests
 tests/report/cucumber_report.json
 tests/report/cucumber_report.html
+tests/acceptance/report/cucumber_report.json
+tests/acceptance/report/cucumber_report.html
