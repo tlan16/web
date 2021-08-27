@@ -1,7 +1,7 @@
 import { mount, RouterLinkStub } from '@vue/test-utils'
 import { getStore, localVue, createFile, stubs } from './views.setup.js'
+import SharedViaLink from '@files/src/views/SharedViaLink.vue'
 import FileActions from '@files/src/mixins/fileActions.js'
-import SharedWithOthers from '@files/src/views/SharedWithOthers.vue'
 import MixinMountSideBar from '@files/src/mixins/sidebar/mountSideBar.js'
 
 const listLoaderStub = 'list-loader-stub'
@@ -14,7 +14,7 @@ const selectors = {
   pagination: '.files-pagination'
 }
 
-describe('SharedWithOthers', () => {
+describe('SharedViaLink', () => {
   it('should show list loader when loading is set as true', () => {
     const wrapper = getMountedWrapper({ loading: true })
 
@@ -152,9 +152,7 @@ describe('SharedWithOthers', () => {
       })
 
       it('should call "rowMounted" method if "rowMounted" event is emitted from oc files table component', () => {
-        const spyRowMounted = jest
-          .spyOn(SharedWithOthers.methods, 'rowMounted')
-          .mockImplementation()
+        const spyRowMounted = jest.spyOn(SharedViaLink.methods, 'rowMounted').mockImplementation()
         const wrapper = getMountedWrapper({ store, loading: false })
         const filesTable = wrapper.find(filesTableStub)
         expect(spyRowMounted).toHaveBeenCalledTimes(0)
@@ -194,7 +192,7 @@ describe('SharedWithOthers', () => {
   }
 
   function getMountedWrapper({ store, loading } = {}) {
-    const component = { ...SharedWithOthers, created: jest.fn(), mounted: jest.fn() }
+    const component = { ...SharedViaLink, created: jest.fn(), mounted: jest.fn() }
     return mount(component, getMountOptions({ store, loading }))
   }
 })
