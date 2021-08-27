@@ -126,7 +126,8 @@ export const getStore = function({
           CLEAR_CURRENT_FILES_LIST: jest.fn(),
           LOAD_FILES: jest.fn(),
           SET_FILE_SELECTION: jest.fn(),
-          SET_APP_SIDEBAR_ACTIVE_PANEL: jest.fn()
+          SET_APP_SIDEBAR_ACTIVE_PANEL: jest.fn(),
+          SET_CURRENT_FOLDER: jest.fn()
         },
         actions: {
           loadFiles: jest.fn(),
