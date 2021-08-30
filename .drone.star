@@ -2149,7 +2149,7 @@ def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironm
         if type(suite) == "list":
             paths = ""
             for path in suite:
-                paths = paths + "tests/acceptance/features/" + path + " "
+                paths = paths + "features/" + path + " "
             environment["TEST_PATHS"] = paths
         elif (suite != "all"):
             environment["TEST_CONTEXT"] = suite
@@ -2182,7 +2182,7 @@ def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironm
         "pull": "always",
         "environment": environment,
         "commands": [
-            "if test -f runUnitTestsOnly; then echo 'skipping webui-acceptance-tests'; else cd %s && ./tests/acceptance/run.sh; fi" % dir["web"],
+            "if test -f runUnitTestsOnly; then echo 'skipping webui-acceptance-tests'; else cd %s/tests/acceptance && ./run.sh; fi" % dir["web"],
         ],
         "volumes": [{
             "name": "gopath",
