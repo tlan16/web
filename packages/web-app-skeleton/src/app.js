@@ -21,8 +21,9 @@ const injectExtensions = async api => {
   console.log('# the server answered and we have all information to register a extension')
   console.log('#############################################################################')
 
-  api.registerExtension(appInfo.id, {
+  api.announceExtension({
     extension: 'txt',
+    isFileEditor: true,
     newFileMenu: {
       menuTitle($gettext) {
         return $gettext('Extension from skeleton')
@@ -62,7 +63,7 @@ export default {
       }
     }
   ],
-  async mounted({ api }) {
+  async mounted(api) {
     await injectExtensions(api)
   }
 }
