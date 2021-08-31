@@ -4,23 +4,23 @@
     uk-height-viewport
     :style="{ backgroundImage: 'url(' + backgroundImg + ')' }"
   >
-    <h1 class="oc-invisible-sr">{{ pageTitle }}</h1>
+    <h1 class="oc-invisible-sr" data-testid="public-link-page-title">{{ pageTitle }}</h1>
     <div class="oc-login-card uk-position-center">
       <img class="oc-login-logo" :src="logoImg" alt="" :aria-hidden="true" />
       <div class="oc-login-card-body">
         <template v-if="loading">
-          <h2 class="oc-login-card-title">
+          <h2 class="oc-login-card-title" data-testid="public-link-loading-text">
             <translate>Loading public link…</translate>
           </h2>
           <oc-spinner :aria-hidden="true" />
         </template>
         <template v-else-if="errorMessage">
-          <h2 class="oc-login-card-title">
+          <h2 class="oc-login-card-title" data-testid="public-link-error-message">
             <translate>An error occurred while loading the public link</translate>
           </h2>
           <p class="oc-text-lead">{{ errorMessage }}</p>
         </template>
-        <template v-else-if="passwordRequired">
+        <template v-else-if="passwordRequired" data-testid="public-link-password-required">
           <form @submit.prevent="resolvePublicLink">
             <h2 class="oc-login-card-title">
               <translate>This resource is password-protected.</translate>
