@@ -564,9 +564,7 @@ module.exports = {
 
       await this.waitForFileVisible(resource)
 
-      return this.useXpath()
-        .click(resourceRowSelector + actionSelector)
-        .useCss()
+      return await this.click('xpath', resourceRowSelector + actionSelector)
     },
 
     moveResource: async function(resource, target) {
