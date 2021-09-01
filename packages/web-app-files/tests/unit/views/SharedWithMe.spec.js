@@ -96,7 +96,8 @@ describe('SharedWithMe', () => {
       ])('should show file share status text', input => {
         stubs['oc-table-files'] = false
         const store = getStore({
-          activeFiles: [createShare({ status: input.status })]
+          activeFiles: [createShare({ status: input.status })],
+          totalFilesCount: { files: 1, folders: 1 }
         })
         const wrapper = getMountedWrapper({ store })
 
@@ -110,7 +111,8 @@ describe('SharedWithMe', () => {
       it('should display context actions', () => {
         stubs['context-actions'] = true
         const store = getStore({
-          activeFiles: [createShare()]
+          activeFiles: [createShare()],
+          totalFilesCount: { files: 1, folders: 1 }
         })
         const wrapper = getMountedWrapper({ store })
 
@@ -124,7 +126,8 @@ describe('SharedWithMe', () => {
         it('should be visible if active files length is greater than zero', () => {
           stubs['list-info'] = true
           const store = getStore({
-            activeFiles: [createShare()]
+            activeFiles: [createShare()],
+            totalFilesCount: { files: 1, folders: 1 }
           })
           const wrapper = getMountedWrapper({ store })
 
@@ -155,7 +158,10 @@ describe('SharedWithMe', () => {
         it.each([shareStatus.pending, shareStatus.declined])(
           'should be visible if the file share status is declined or pending',
           input => {
-            const store = getStore({ activeFiles: [createShare({ id: '1234', status: input })] })
+            const store = getStore({
+              activeFiles: [createShare({ id: '1234', status: input })],
+              totalFilesCount: { files: 1, folders: 1 }
+            })
             const wrapper = getMountedWrapper({ store })
 
             const acceptShareButton = wrapper.find(selectors.acceptShareButton)
@@ -166,7 +172,8 @@ describe('SharedWithMe', () => {
         )
         it('should not exist if the file share status is not declined or pending', () => {
           const store = getStore({
-            activeFiles: [createShare({ id: '1234', status: shareStatus.accepted })]
+            activeFiles: [createShare({ id: '1234', status: shareStatus.accepted })],
+            totalFilesCount: { files: 1, folders: 1 }
           })
           const wrapper = getMountedWrapper({ store })
           const acceptShareButton = wrapper.find(selectors.acceptShareButton)
@@ -179,7 +186,10 @@ describe('SharedWithMe', () => {
             SharedWithMe.mixins[1].methods,
             '$_acceptShare_trigger'
           )
-          const store = getStore({ activeFiles: [acceptedShare] })
+          const store = getStore({
+            activeFiles: [acceptedShare],
+            totalFilesCount: { files: 1, folders: 1 }
+          })
           const wrapper = getMountedWrapper({ store })
 
           const acceptShareButton = wrapper.find(selectors.acceptShareButton)
@@ -197,7 +207,10 @@ describe('SharedWithMe', () => {
         it.each([shareStatus.accepted, shareStatus.pending])(
           'should be visible if the file share status is pending or accepted',
           inputStatus => {
-            const store = getStore({ activeFiles: [createShare({ status: inputStatus })] })
+            const store = getStore({
+              activeFiles: [createShare({ status: inputStatus })],
+              totalFilesCount: { files: 1, folders: 1 }
+            })
             const wrapper = getMountedWrapper({ store })
 
             const declineShareButton = wrapper.find(selectors.declineShareButton)
@@ -206,7 +219,10 @@ describe('SharedWithMe', () => {
           }
         )
         it('should not be visible if the file share status is not pending or accepted', () => {
-          const store = getStore({ activeFiles: [createShare({ status: shareStatus.declined })] })
+          const store = getStore({
+            activeFiles: [createShare({ status: shareStatus.declined })],
+            totalFilesCount: { files: 1, folders: 1 }
+          })
           const wrapper = getMountedWrapper({ store })
 
           const declineShareButton = wrapper.find(selectors.declineShareButton)
@@ -219,7 +235,10 @@ describe('SharedWithMe', () => {
             SharedWithMe.mixins[2].methods,
             '$_declineShare_trigger'
           )
-          const store = getStore({ activeFiles: [declinedShare] })
+          const store = getStore({
+            activeFiles: [declinedShare],
+            totalFilesCount: { files: 1, folders: 1 }
+          })
           const wrapper = getMountedWrapper({ store })
 
           expect(spyDeclineShareTrigger).toHaveBeenCalledTimes(0)
