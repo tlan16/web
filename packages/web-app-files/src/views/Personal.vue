@@ -387,7 +387,3 @@ export default {
   }
 }
 </script>
-<style lang='sass' scoped>
-//.files-table > tbody tr:hover
-//  background-color: red
-</style>
