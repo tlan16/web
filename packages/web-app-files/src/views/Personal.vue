@@ -307,7 +307,8 @@ export default {
     },
 
     mouseLeft(resource, component) {
-      component.$el.classList.remove('oc-table-highlighted')
+      if (!this.selected.map(({id}) => id).includes(resource.id))
+        component.$el.classList.remove('oc-table-highlighted')
     },
 
     rowMounted(resource, component) {
