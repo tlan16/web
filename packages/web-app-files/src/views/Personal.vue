@@ -31,6 +31,8 @@
         @showDetails="$_mountSideBar_showDefaultPanel"
         @fileClick="$_fileActions_triggerDefaultAction"
         @rowMounted="rowMounted"
+        @mouseOver="mouseOver"
+        @mouseLeft="mouseLeft"
       >
         <template #quickActions="{ resource }">
           <quick-actions
@@ -300,6 +302,14 @@ export default {
       })
     },
 
+    mouseOver(resource, component) {
+      component.$el.classList.add('oc-table-highlighted')
+    },
+
+    mouseLeft(resource, component) {
+      component.$el.classList.remove('oc-table-highlighted')
+    },
+
     rowMounted(resource, component) {
       if (!this.displayThumbnails) {
         return
@@ -377,3 +387,7 @@ export default {
   }
 }
 </script>
+<style lang='sass' scoped>
+//.files-table > tbody tr:hover
+//  background-color: red
+</style>
